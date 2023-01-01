@@ -1,5 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tweet_feed/services/auth.dart';
+
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -10,40 +11,7 @@ class Register extends StatefulWidget {
 
 class _SignInState extends State<Register> {
 
-  FirebaseAuth auth = FirebaseAuth.instance;
-
-  void registerAction() async {
-    try {
-      final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-  void loginAction() async {
-    try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  final Authentication _authService = Authentication();
 
   String email = '', password = '';
 
@@ -74,13 +42,13 @@ class _SignInState extends State<Register> {
                 ),
                 ElevatedButton(
                     onPressed: () async => {
-                      registerAction()
+                      _authService.register(email, password)
                     },
                     child: const Text("Register")
                 ),
                 ElevatedButton(
                     onPressed: () async => {
-                      loginAction()
+                      _authService.login(email, password)
                     },
                     child: const Text("Login")
                 )

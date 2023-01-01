@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tweet_feed/auth/register_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:tweet_feed/screens/auth/register_page.dart';
 import 'firebase_options.dart';
 
 void main() {
