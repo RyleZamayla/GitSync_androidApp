@@ -12,7 +12,6 @@ class Register extends StatefulWidget {
 class _SignInState extends State<Register> {
 
   final Authentication _authService = Authentication();
-
   String email = '', password = '';
 
   @override
