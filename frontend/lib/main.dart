@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:tweet_feed/screens/auth/register_page.dart';
-import 'firebase_options.dart';
+import 'package:provider/provider.dart';
+import 'package:tweet_feed/models/user.dart';
+import 'package:tweet_feed/screens/wrapper.dart';
+import 'package:tweet_feed/services/auth.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,6 +12,8 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +24,20 @@ class MyApp extends StatelessWidget {
 
           }
           if(snapshot.connectionState == ConnectionState.done){
-            return MaterialApp(
-              title: 'Flutter Demo',
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-              ),
-              debugShowCheckedModeBanner: false,
-              home: const Register(),
+            return MultiProvider(
+                providers: [
+                  StreamProvider<UserModel?>.value(
+                      value:Authentication().user,
+                      initialData: null,
+                  )
+                ],
+                child: MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  home: Wrapper(),
+                )
             );
           }
-          return Text("Loading");
+          return const Text("Loading");
         }
     );
   }

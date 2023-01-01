@@ -10,6 +10,10 @@ class Authentication {
     return user != null ? UserModel(id: user.uid) : null;
   }
 
+  Stream<UserModel?> get user{
+    return auth.authStateChanges().map((User? user) => _firebaseUser(user!));
+  }
+
   Future login(email, password) async {
     try {
       User userCred = (await auth.signInWithEmailAndPassword(
@@ -39,6 +43,15 @@ class Authentication {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future logout() async {
+    try {
+      return await auth.signOut();
+    } catch (e) {
+      print(e.toString());
+      return null;
     }
   }
 }
