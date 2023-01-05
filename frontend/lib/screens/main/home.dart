@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:tweet_feed/services/auth.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  Home({Key? key}) : super(key: key);
+
+  final Authentication _authService = Authentication();
 
   @override
+
   Widget build(BuildContext context) {
-    final Authentication _authService = Authentication();
     return Scaffold(
       appBar: AppBar(
         title: const Text("home"),
         actions: <Widget>[
-          TextButton.icon(
+          IconButton(
             onPressed: () async {
                 _authService.logout();
               },
@@ -19,8 +21,7 @@ class Home extends StatelessWidget {
                 Icons.logout,
                 size: 24
             ),
-            label: const Text("Logout"),
-              )
+          )
         ],
       ),
     );

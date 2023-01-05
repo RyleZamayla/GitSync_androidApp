@@ -11,6 +11,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   MyApp({super.key});
