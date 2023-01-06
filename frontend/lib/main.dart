@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
                       initialData: null,
                   )
                 ],
-                child: const MaterialApp(
+                child: MaterialApp(
                   debugShowCheckedModeBanner: false,
                   home: Wrapper(),
                 )
