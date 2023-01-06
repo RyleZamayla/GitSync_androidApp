@@ -16,9 +16,11 @@ class Authentication {
 
   Future login(email, password) async {
     try {
-      User? userCred = (await auth.signInWithEmailAndPassword(
-        email: email, password: password,)).user;
-      _firebaseUser(userCred!);
+      User userCred = (await auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      )) as User;
+      _firebaseUser(userCred);
     } on FirebaseAuthException catch (e) {
       print(e);
     } catch (e) {
@@ -28,8 +30,11 @@ class Authentication {
 
   Future register(email, password) async {
     try {
-      User? userCred = (await auth.createUserWithEmailAndPassword(email: email, password: password,)).user;
-      _firebaseUser(userCred!);
+      User userCred = (await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      )) as User;
+      _firebaseUser(userCred);
 
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
