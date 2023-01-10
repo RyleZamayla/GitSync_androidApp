@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tweet_feed/services/auth.dart';
 
@@ -11,7 +12,35 @@ class Register extends StatefulWidget {
 
 class _SignInState extends State<Register> {
 
+  // String? errorMessage = '';
+  // bool isLogedIn = true;
+
   final Authentication _authService = Authentication();
+  // final TextEditingController _email = TextEditingController();
+  // TextEditingController _password = TextEditingController();
+  //
+  // Future <void> registerLogin () async {
+  //   try {
+  //     await Authentication().login(email: _email.text, password: _password.text);
+  //   }
+  //   on FirebaseAuthException catch (e) {
+  //     setState(() {
+  //       errorMessage = e.message;
+  //     });
+  //   }
+  // }
+  //
+  // Future <void> registerCreate () async {
+  //   try {
+  //     await Authentication().register(email: _email.text, password: _password.text);
+  //   }
+  //   on FirebaseAuthException catch (e) {
+  //     setState(() {
+  //       errorMessage = e.message;
+  //     });
+  //   }
+  // }
+
   String email = '', password = '';
 
   @override

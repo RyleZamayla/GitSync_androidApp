@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tweet_feed/models/user.dart';
 
@@ -5,6 +6,21 @@ import 'package:tweet_feed/models/user.dart';
 class Authentication {
 
   final FirebaseAuth auth = FirebaseAuth.instance;
+
+  // User? get currentUser => auth.currentUser;
+  // Stream<User?> get authStateChanges => auth.authStateChanges();
+  //
+  // Future <void> login ({required String email, password}) async {
+  //   await auth.signInWithEmailAndPassword(email: email, password: password);
+  // }
+  //
+  // Future <void> register ({required String email, password}) async {
+  //   await auth.createUserWithEmailAndPassword(email: email, password: password);
+  // }
+  //
+  // Future <void> logout () async {
+  //   await auth.signOut();
+  // }
 
   UserModel? _firebaseUser(User user) {
     return user != null ? UserModel(id: user.uid) : null;
@@ -31,12 +47,12 @@ class Authentication {
 
   Future register(email, password) async {
     try {
-      User userCred = (await auth.createUserWithEmailAndPassword(
+      UserCredential userCred = (await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
-      )) as User;
-      _firebaseUser(userCred);
-
+      ));
+      await FirebaseFirestore.instance.collection('users').doc(userCred.user!.uid).set({'name': email, 'email': email});
+      _firebaseUser(userCred.user!);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -49,10 +65,8 @@ class Authentication {
   }
 
   Future logout() async {
-    try {
-      return await auth.signOut();
-    } catch (e) {
-      print(e.toString());
+    try { return await auth.signOut();
+      } catch (e) { print(e.toString());
       return null;
     }
   }
