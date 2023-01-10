@@ -24,13 +24,15 @@ class Home extends StatelessWidget {
         onPressed: (){
           Navigator.pushNamed(context, '/add');
         },
-        child: Icon(Icons.add)),
+        child: const Icon(Icons.add)),
         drawer: Drawer(
           child: ListView(
             children: <Widget>[
-              DrawerHeader(
+              const DrawerHeader(
                 child: Text('Drawer Header'),
-                decoration: BoxDecoration(color: Colors.blue)),
+                decoration: BoxDecoration(
+                    color: Colors.blue)
+              ),
               ListTile(
                 title: Text('Profile'),
                 onTap: (){
