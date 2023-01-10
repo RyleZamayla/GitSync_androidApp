@@ -4,6 +4,7 @@ import 'package:tweet_feed/models/user.dart';
 import 'package:tweet_feed/screens/auth/register_page.dart';
 import 'package:tweet_feed/screens/main/home.dart';
 import 'package:tweet_feed/screens/main/posts/add.dart';
+import 'package:tweet_feed/screens/main/profile/profile.dart';
 
 class Wrapper extends StatelessWidget {
   const Wrapper({Key? key}) : super(key: key);
@@ -16,12 +17,12 @@ class Wrapper extends StatelessWidget {
       return Register();
     }
 
-    return MaterialApp(
-      initialRoute: '/',
-      routes: {
+    return MaterialApp( initialRoute: '/', routes: {
         '/' : (context) => Home(),
-        '/add' : (context) => Add()
+        '/add' : (context) => CreateTweet(),
+        '/profile' : (context) => Profile()
       },
+      debugShowCheckedModeBanner: false,
     );
     // return Home();
   }

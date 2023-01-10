@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:tweet_feed/services/posts.dart';
 
-class Add extends StatefulWidget {
-  const Add({Key? key}) : super(key: key);
+class CreateTweet extends StatefulWidget {
+  const CreateTweet({Key? key}) : super(key: key);
 
   @override
-  State<Add> createState() => _AddState();
+  State<CreateTweet> createState() => _CreateTweet();
 }
 
-class _AddState extends State<Add> {
+class _CreateTweet extends State<CreateTweet> {
 
   final PostService _postService = PostService();
   String text = '';

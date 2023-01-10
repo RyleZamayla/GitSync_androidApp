@@ -4,7 +4,7 @@ import 'package:tweet_feed/models/user.dart';
 
 class Authentication {
 
-  FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   UserModel? _firebaseUser(User user) {
     return user != null ? UserModel(id: user.uid) : null;
@@ -21,6 +21,7 @@ class Authentication {
         password: password,
       )) as User;
       _firebaseUser(userCred);
+      print("Signed in as: $User ");
     } on FirebaseAuthException catch (e) {
       print(e);
     } catch (e) {
