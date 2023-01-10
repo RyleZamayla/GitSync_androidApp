@@ -16,7 +16,7 @@ class PostService {
 
   Future savePost(text) async{
     await FirebaseFirestore.instance.collection('post').add({
-      'text' : text,
+      'tweet' : text,
       'creator' : FirebaseAuth.instance.currentUser?.uid,
       'timestamp' : FieldValue.serverTimestamp()
     });
@@ -25,7 +25,8 @@ class PostService {
   Stream<List<PostModel>> getUserPost(uid){
     return FirebaseFirestore.instance.collection('post')
         .where('creator', isEqualTo: uid)
-        .snapshots().map((_postListSnapshot)
+        .snapshots()
+        .map((_postListSnapshot)
     );
   }
 }

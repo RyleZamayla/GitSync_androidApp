@@ -11,34 +11,34 @@ class CreateTweet extends StatefulWidget {
 class _CreateTweet extends State<CreateTweet> {
 
   final PostService _postService = PostService();
-  String text = '';
+  String tweet = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tweet'),
+        title: const Text('Tweet'),
         actions: <Widget>[
           MaterialButton(
               textColor: Colors.white,
               onPressed: () async {
-                _postService.savePost(text);
+                _postService.savePost(tweet);
                 Navigator.pop(context);
               },
-              child: Text('Tweets')
+              child: const Text('Tweets')
           )
         ],
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
             vertical: 20,
             horizontal: 10
         ),
-        child: new Form(
+        child: Form(
             child: TextFormField(
               onChanged: (val){
                 setState(() {
-                  text = val;
+                  tweet = val;
                 });
               },
             )
