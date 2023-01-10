@@ -4,6 +4,7 @@ import 'package:tweet_feed/models/user.dart';
 import 'package:tweet_feed/screens/auth/register_page.dart';
 import 'package:tweet_feed/screens/main/home.dart';
 import 'package:tweet_feed/screens/main/posts/add.dart';
+import 'package:tweet_feed/screens/main/profile/edit.dart';
 import 'package:tweet_feed/screens/main/profile/profile.dart';
 
 class Wrapper extends StatelessWidget {
@@ -20,7 +21,9 @@ class Wrapper extends StatelessWidget {
     return MaterialApp( initialRoute: '/', routes: {
         '/' : (context) => Home(),
         '/add' : (context) => CreateTweet(),
-        '/profile' : (context) => Profile()
+        '/profile' : (context) => Profile(),
+        '/edit' : (context) => Edit(),
+
       },
       debugShowCheckedModeBanner: false,
     );
