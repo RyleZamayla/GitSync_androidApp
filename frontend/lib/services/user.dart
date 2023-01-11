@@ -9,6 +9,18 @@ class UserServices {
 
   UtilityService _utilityService = UtilityService();
 
+  List<UserModel?> _userListFromQuerySnapshot(QuerySnapshot<Map<String, dynamic>> snapshot) {
+    return snapshot.docs.map((doc){
+      return UserModel(
+          id: doc.id,
+          name: doc['name'] ?? '',
+          profileImageUrl: doc['profileImageUrl'] ?? '',
+          bannerImageUrl: doc['bannerImageUrl'] ?? '',
+          email: doc['email'] ?? ''
+      );
+    }) .toList();
+  }
+
   UserModel? _firebaseUser(DocumentSnapshot snapshot){
     final data = snapshot.data()! as Map<String,dynamic>;
     return snapshot != null ? UserModel(
@@ -24,12 +36,19 @@ class UserServices {
     return FirebaseFirestore.instance.collection('users').doc(uid).snapshots().map(_firebaseUser);
   }
 
-  Future <void> updateProfile(
-      File _bannerImage, File _profileImage, String name) async {
+  Stream <List<UserModel?>> queryByName(searchData) {
+    return FirebaseFirestore
+        .instance.collection('users')
+        .orderBy('name')
+        .startAt([searchData])
+        .endAt([searchData + '\uf8ff'])
+        .limit(8)
+        .snapshots()
+        .map(_userListFromQuerySnapshot);
+  }
 
-    String bannerImageUrl = '',
-        profileImageUrl = '';
-
+  Future <void> updateProfile(File _bannerImage, _profileImage, String name) async {
+    String bannerImageUrl = '', profileImageUrl = '';
     if (_bannerImage != null){
       bannerImageUrl = await _utilityService.uploadFile(
           _bannerImage,
@@ -47,5 +66,7 @@ class UserServices {
 
     await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update(data);
   }
+
+
 
 }
