@@ -21,17 +21,21 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+
     return MultiProvider(
         providers: [
           StreamProvider<List<PostModel>>.value(
             value: _postService.getUserPost(FirebaseAuth.instance.currentUser?.uid),
-            initialData: [],
+            initialData: [ ],
           ),
           StreamProvider.value(
             value: _userServices.getUserInfo(FirebaseAuth.instance.currentUser?.uid),
-            initialData: [],
+            initialData: [ ],
           ),
         ],
+
+      // Profile Tab
+
       child: Scaffold(
         body: DefaultTabController(
           length: 2,
@@ -43,22 +47,25 @@ class _ProfileState extends State<Profile> {
                   pinned: true,
                   expandedHeight: 130,
                   flexibleSpace: FlexibleSpaceBar(
-                    background: Image.network(Provider.of<UserModel>(context).bannerImageUrl ?? '',
-                      fit: BoxFit.cover)
+                    background: Image.network(
+                        Provider.of<UserModel?>(context)?.bannerImageUrl ?? '',
+                        fit: BoxFit.cover)
                   ),
                 ),
                 SliverList(delegate: SliverChildListDelegate(
                   [
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                       child: Column(
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Image.network(Provider.of<UserModel>(context).profileImageUrl ?? '',
+                              Image.network(
+                                Provider.of<UserModel>(context).profileImageUrl ?? '',
                                   height: 60,
-                                  fit: BoxFit.cover),
+                                  fit: BoxFit.cover
+                              ),
                               ElevatedButton(
                                 onPressed: () async {
                                 Navigator.pushNamed(context, '/edit');
@@ -67,11 +74,12 @@ class _ProfileState extends State<Profile> {
                             ],
                           ),
                           Align(
+
                             alignment: Alignment.centerLeft,
                               child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                 child: Text(Provider.of<UserModel>(context).name ?? '',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
                                   
@@ -85,10 +93,14 @@ class _ProfileState extends State<Profile> {
                 ))
               ];
             },
+
+            // Tweets
+
             body: ListPost(),
           ),
         ),
       ),
     );
   }
+
 }

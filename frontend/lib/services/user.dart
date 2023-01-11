@@ -24,8 +24,12 @@ class UserServices {
     return FirebaseFirestore.instance.collection('users').doc(uid).snapshots().map(_firebaseUser);
   }
 
-  Future <void> updateProfile(File _bannerImage, _profileImage, String name) async {
-    String bannerImageUrl = '', profileImageUrl = '';
+  Future <void> updateProfile(
+      File _bannerImage, File _profileImage, String name) async {
+
+    String bannerImageUrl = '',
+        profileImageUrl = '';
+
     if (_bannerImage != null){
       bannerImageUrl = await _utilityService.uploadFile(
           _bannerImage,

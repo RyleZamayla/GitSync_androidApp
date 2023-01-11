@@ -29,12 +29,12 @@ class Authentication {
   //   return User (user.uid);
   // }
 
-  UserModel? _firebaseUser(User user) {
+  UserModel? _firebaseUser(User? user) {
     return user != null ? UserModel(id: user.uid) : null;
   }
 
   Stream<UserModel?> get user{
-    return auth.authStateChanges().map((User? user) => _firebaseUser(user!));
+    return auth.authStateChanges().map(_firebaseUser);
   }
 
   Future login(email, password) async {
@@ -58,7 +58,10 @@ class Authentication {
         email: email,
         password: password,
       ));
-      await FirebaseFirestore.instance.collection('users').doc(userCred.user!.uid).set({'name': email, 'email': email});
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCred.user!.uid)
+          .set({'name': email, 'email': email});
       _firebaseUser(userCred.user!);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
