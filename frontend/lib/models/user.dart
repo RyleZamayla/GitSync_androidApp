@@ -1,11 +1,12 @@
 class UserModel {
-  final String id, bannerImageUrl, profileImageUrl, name, email;
+  final String id;
+  String? bannerImageUrl, profileImageUrl, name, email;
 
   UserModel ({
     required this.id,
-    required this.bannerImageUrl,
-    required this.profileImageUrl,
-    required this.name,
-    required this.email
+    this.bannerImageUrl,
+    this.profileImageUrl,
+    this.name,
+    this.email
   });
 }
