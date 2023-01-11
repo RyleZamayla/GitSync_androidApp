@@ -22,6 +22,13 @@ class Authentication {
   //   await auth.signOut();
   // }
 
+  // final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
+
+  // User? _userFromFirebase (auth.User? user){
+  //   if (user == null) return null;
+  //   return User (user.uid);
+  // }
+
   UserModel? _firebaseUser(User user) {
     return user != null ? UserModel(id: user.uid) : null;
   }
@@ -63,6 +70,7 @@ class Authentication {
       print(e);
     }
   }
+
 
   Future logout() async {
     try { return await auth.signOut();
