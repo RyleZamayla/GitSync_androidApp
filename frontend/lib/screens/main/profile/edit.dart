@@ -38,24 +38,24 @@ class _Edit extends State<Edit> {
       appBar: AppBar(
         actions: [
           IconButton(onPressed: () async{
-            await _userServices.updateProfile(_bannerImage!, _profileImage, name);
+            await _userServices.updateProfile(_bannerImage!, _profileImage!, name);
             Navigator.pop(context);
-          }, icon: Icon(Icons.save))
+          }, icon: const Icon(Icons.save))
         ],
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
         child: Form(
             child: Column(
               children: [
                 ElevatedButton(
                     onPressed: () => getImage(0),
-                    child: _profileImage == null ? Icon(Icons.person) :
+                    child: _profileImage == null ? const Icon(Icons.person) :
                       Image.file(_profileImage!, height: 100,)
                 ),
                 ElevatedButton(
                     onPressed: () => getImage(1),
-                    child: _bannerImage == null ? Icon(Icons.person) :
+                    child: _bannerImage == null ? const Icon(Icons.person) :
                     Image.file(_bannerImage!, height: 100,)
                 ),
                 TextFormField(
