@@ -11,6 +11,12 @@
       <excludeFolder url="file://$MODULE_DIR$/frontend/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/frontend/build" />
       <excludeFolder url="file://$MODULE_DIR$/frontend/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/windows/flutter/ephemeral/.plugin_symlinks/permission_handler_windows/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/windows/flutter/ephemeral/.plugin_symlinks/permission_handler_windows/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/windows/flutter/ephemeral/.plugin_symlinks/permission_handler_windows/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/windows/flutter/ephemeral/.plugin_symlinks/permission_handler_windows/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/windows/flutter/ephemeral/.plugin_symlinks/permission_handler_windows/build" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/windows/flutter/ephemeral/.plugin_symlinks/permission_handler_windows/.dart_tool" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 33, extension level 3 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
