@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tweet_feed/screens/home/feed.dart';
 import 'package:tweet_feed/screens/home/search.dart';
@@ -48,7 +49,7 @@ class _HomeState extends State<Home> {
             ListTile(
               title: Text('Profile'),
               onTap: (){
-                Navigator.pushNamed(context, '/profile');
+                Navigator.pushNamed(context, '/profile', arguments: FirebaseAuth.instance.currentUser!.uid);
               },
             ),
             ListTile(
