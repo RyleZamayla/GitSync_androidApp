@@ -33,7 +33,11 @@ class UserServices {
   }
 
   Stream <UserModel?> getUserInfo(uid) {
-    return FirebaseFirestore.instance.collection('users').doc(uid).snapshots().map(_firebaseUser);
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .snapshots()
+        .map(_firebaseUser);
   }
 
   Stream <List<UserModel?>> queryByName(searchData) {
