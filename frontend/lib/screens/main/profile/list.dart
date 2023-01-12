@@ -18,21 +18,16 @@ class _ListUsersState extends State<ListUsers> {
       shrinkWrap: true,
       itemCount: firebaseUsers.length,
       itemBuilder: (context, index) {
-        final users = firebaseUsers[index];
+        final dynamic users = firebaseUsers[index];
         return InkWell(
+          onTap: () => Navigator.pushNamed(context, '/profile', arguments: users.id),
           child: Column(
             children: [
               Padding(padding: EdgeInsets.all(10),
               child: Row(
                 children: [
-                  users.profileImageUrl != null ?
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage: NetworkImage(
-                        users.profileImageUrl!
-                      ),
-                    ) : Icon(Icons.person_add_alt_1_outlined,
-                          size: 40,)
+                  SizedBox(width: 10),
+                  Text(users.name)
                 ],
               ),),
               const Divider(thickness: 1)

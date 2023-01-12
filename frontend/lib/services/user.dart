@@ -64,9 +64,8 @@ class UserServices {
     if (profileImageUrl != '') data['profileImageUrl'] = profileImageUrl;
     if (bannerImageUrl != '') data['bannerImageUrl'] = bannerImageUrl;
 
+
+
     await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update(data);
   }
-
-
-
 }

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tweet_feed/models/posts.dart';
@@ -21,15 +20,18 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+  final String uid = ModalRoute.of(context)!.settings.arguments.toString();
+
+  // print("link is: ${Provider.of<UserModel?>(context)?.bannerImageUrl.toString()}");
 
     return MultiProvider(
         providers: [
           StreamProvider<List<PostModel>>.value(
-            value: _postService.getUserPost(FirebaseAuth.instance.currentUser?.uid),
+            value: _postService.getUserPost(uid),
             initialData: [ ],
           ),
           StreamProvider.value(
-            value: _userServices.getUserInfo(FirebaseAuth.instance.currentUser?.uid),
+            value: _userServices.getUserInfo(uid),
             initialData: [ ],
           ),
         ],
@@ -48,7 +50,7 @@ class _ProfileState extends State<Profile> {
                   expandedHeight: 130,
                   flexibleSpace: FlexibleSpaceBar(
                     background: Image.network(
-                        Provider.of<UserModel?>(context)?.bannerImageUrl ?? '',
+                        Provider.of<UserModel>(context)!.bannerImageUrl.toString() ?? '',
                         fit: BoxFit.cover)
                   ),
                 ),
@@ -61,11 +63,14 @@ class _ProfileState extends State<Profile> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Image.network(
-                                Provider.of<UserModel>(context).profileImageUrl ?? '',
-                                  height: 60,
-                                  fit: BoxFit.cover
-                              ),
+                              Provider.of<UserModel>(context)!.profileImageUrl != null ?
+                              CircleAvatar(
+                                radius: 40,
+                                backgroundImage: NetworkImage(
+                                    Provider.of<UserModel>(context).profileImageUrl.toString() ?? ''
+                                ),
+                              ) : Icon(Icons.person_outlined,
+                                size: 40,),
                               ElevatedButton(
                                 onPressed: () async {
                                 Navigator.pushNamed(context, '/edit');
