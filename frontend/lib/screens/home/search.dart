@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tweet_feed/models/user.dart';
 import 'package:tweet_feed/screens/main/profile/list.dart';
 import 'package:tweet_feed/services/user.dart';
 
@@ -18,26 +19,32 @@ class _SearchState extends State<Search> {
   
   @override
   Widget build(BuildContext context) {
-    return StreamProvider.value(
-      value: _userServices.queryByName(search),
-      initialData: [],
+    return MultiProvider(
+        providers: [
+          StreamProvider<List<UserModel?>>.value(
+            value: _userServices.queryByName(search),
+            initialData: [],
+    ),
+        ],
       child: Column(
         children: [
           Padding(padding: EdgeInsets.all(10),
-          child: TextField(
-            onChanged: (text) {
-              setState(() {
-                search = text;
-              });
-            },
-            decoration: InputDecoration(
-              hintText: 'Search...'
+            child: TextField(
+              onChanged: (text) {
+                setState(() {
+                  search = text;
+                });
+              },
+              decoration: InputDecoration(
+                  hintText: 'Search...'
+              ),
             ),
-          ),
           ),
           ListUsers()
         ],
       ),
+
     );
+
   }
 }

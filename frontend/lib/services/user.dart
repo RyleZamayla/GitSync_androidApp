@@ -36,10 +36,22 @@ class UserServices {
     return FirebaseFirestore.instance.collection('users').doc(uid).snapshots().map(_firebaseUser);
   }
 
+  Future<List<String>> getUserFollowing(uid) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('following')
+        .get();
+
+      final users = querySnapshot.docs.map((doc ) => doc.id).toList();
+      return users;
+
+  }
+
   Stream <List<UserModel?>> queryByName(searchData) {
     return FirebaseFirestore
         .instance.collection('users')
-        .orderBy('name')
+        .orderBy('creator')
         .startAt([searchData])
         .endAt([searchData + '\uf8ff'])
         .limit(8)
