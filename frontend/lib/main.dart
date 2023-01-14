@@ -32,9 +32,9 @@ class MyApp extends StatelessWidget {
                       initialData: null
                   )
                 ],
-                child: MaterialApp(
+                child: const MaterialApp(
                   debugShowCheckedModeBanner: false,
-                  //darkTheme: ThemeData.dark(),
+                  ///darkTheme: ThemeData.dark(),
                   home: Wrapper(),
                 )
             );

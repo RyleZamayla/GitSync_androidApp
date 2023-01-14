@@ -1,3 +1,4 @@
+
 name: tweet_feed
 description: A new Flutter project.
 
@@ -42,6 +43,7 @@ dependencies:
   provider: ^6.0.5
   image_picker: ^0.8.6
   firebase_storage: ^11.0.10
+  wave: ^0.2.2
 
 dev_dependencies:
   flutter_test:
