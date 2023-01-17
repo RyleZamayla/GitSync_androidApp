@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tweet_feed/screens/auth/register_page.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import 'package:tweet_feed/services/auth.dart';
@@ -30,8 +31,14 @@ class _SignInState extends State<LoginPage> {
           padding: const EdgeInsets.only(top: 90, right: 20, left: 20),
           child: ListView(
             children: [
-              const Text('Git sync to everyone in the branch.', style: TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.bold),),
-              const SizedBox(height: 35,),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.usb, color: CupertinoColors.white, size: 120,),
+                  Text('Git sync to everyone in the branch.', style: TextStyle(color: CupertinoColors.systemGrey, fontSize: 17, fontWeight: FontWeight.bold),),
+                ],
+              ),
+              const SizedBox(height: 20,),
               TextFormField(
                 style: const TextStyle(color: CupertinoColors.systemGrey2),
                 decoration: InputDecoration(
@@ -64,14 +71,14 @@ class _SignInState extends State<LoginPage> {
                   labelText: 'Password',
                   labelStyle: const TextStyle(color: CupertinoColors.systemGrey2),
                   enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: Colors.grey
-                      ),
-                      borderRadius: BorderRadius.circular(10)
+                    borderSide: const BorderSide(
+                      color: Colors.grey
+                    ),
+                    borderRadius: BorderRadius.circular(10)
                   ),
                   focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: CupertinoColors.activeBlue,)
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: CupertinoColors.activeBlue,)
                   ),
                   suffixIcon: IconButton(
                     icon: Icon(_password ? Icons.visibility : Icons.visibility_off, color: CupertinoColors.systemGrey, size: 20,),
@@ -93,16 +100,16 @@ class _SignInState extends State<LoginPage> {
                   text: TextSpan(
                     children: <TextSpan> [
                       TextSpan(
-                          text: 'Forgot password?',
-                          style: const TextStyle(
-                              color: CupertinoColors.systemBlue,
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                              fontStyle: FontStyle.italic
-                          ),
-                          recognizer: TapGestureRecognizer()..onTap = () async{
-                            _authService.login(email, password);
-                          }
+                        text: 'Forgot password?',
+                        style: const TextStyle(
+                          color: CupertinoColors.systemBlue,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic
+                        ),
+                        recognizer: TapGestureRecognizer()..onTap = () async{
+                          _authService.login(email, password);
+                        }
                       ),
                     ],
                   ),
@@ -178,10 +185,10 @@ class _SignInState extends State<LoginPage> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(35),
-                    )
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(35),
+                  )
                 ),
                 onPressed: () async => {
                   _authService.login(email, password)
@@ -211,11 +218,14 @@ class _SignInState extends State<LoginPage> {
                     style: const TextStyle(color: CupertinoColors.systemGrey2, fontSize: 13),
                     children: <TextSpan> [
                       TextSpan(
-                          text: '    Signup',
-                          style: const TextStyle(color: CupertinoColors.systemBlue, fontSize: 13),
-                          recognizer: TapGestureRecognizer()..onTap = () {
-                            ///RegisterPage();
-                          }
+                        text: '    Signup',
+                        style: const TextStyle(color: CupertinoColors.systemBlue, fontSize: 13),
+                        recognizer: TapGestureRecognizer()..onTap = () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const RegisterPage())
+                          );
+                        }
                       ),
                     ],
                   ),
