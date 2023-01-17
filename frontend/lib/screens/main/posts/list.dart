@@ -36,7 +36,7 @@ class _ListPostState extends State<ListPost> {
                       snapshot.data?.profileImageUrl != null
                           ? CircleAvatar(
                               radius: 20,
-                              backgroundImage: NetworkImage(snapshot.data.profileImageUrl))
+                              backgroundImage: NetworkImage(snapshot.data!.profileImageUrl))
                           : const Icon(Icons.person, size: 40),
                       const SizedBox(width: 10),
                       Text(snapshot.data!.name)
