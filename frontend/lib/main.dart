@@ -7,7 +7,9 @@ import 'package:tweet_feed/services/auth.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  runApp(
+      MyApp()
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -34,7 +36,6 @@ class MyApp extends StatelessWidget {
                 ],
                 child: const MaterialApp(
                   debugShowCheckedModeBanner: false,
-                  ///darkTheme: ThemeData.dark(),
                   home: Wrapper(),
                 )
             );
