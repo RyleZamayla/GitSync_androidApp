@@ -12,8 +12,11 @@ class ListUsers extends StatefulWidget {
 class _ListUsersState extends State<ListUsers> {
 
   @override
+
   Widget build(BuildContext context) {
-    final firebaseUsers = Provider.of<List<UserModel>>(context) ?? [];
+
+    final firebaseUsers = Provider.of<List<UserModel?>>(context) ?? [];
+
     return ListView.builder(
       shrinkWrap: true,
       itemCount: firebaseUsers.length,
