@@ -20,6 +20,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+
   final String uid = ModalRoute.of(context)!.settings.arguments.toString();
 
   // print("link is: ${Provider.of<UserModel?>(context)?.bannerImageUrl.toString()}");

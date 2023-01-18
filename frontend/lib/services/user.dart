@@ -35,7 +35,7 @@ class UserServices {
   Stream <List<UserModel?>> queryByName(searchData) {
     return FirebaseFirestore
         .instance.collection('users')
-        .orderBy('name')
+        .orderBy('creator')
         .startAt([searchData])
         .endAt([searchData + '\uf8ff'])
         .limit(8)
