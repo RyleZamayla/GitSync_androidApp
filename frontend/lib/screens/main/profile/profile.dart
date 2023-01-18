@@ -51,7 +51,7 @@ class _ProfileState extends State<Profile> {
                   expandedHeight: 130,
                   flexibleSpace: FlexibleSpaceBar(
                     background: Image.network(
-                        Provider.of<UserModel>(context)!.bannerImageUrl.toString() ?? '',
+                        Provider.of<UserModel>(context).bannerImageUrl.toString() ?? '',
                         fit: BoxFit.cover)
                   ),
                 ),
@@ -64,13 +64,13 @@ class _ProfileState extends State<Profile> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Provider.of<UserModel>(context)!.profileImageUrl != null ?
+                              Provider.of<UserModel?>(context)!.profileImageUrl != null ?
                               CircleAvatar(
                                 radius: 40,
                                 backgroundImage: NetworkImage(
-                                    Provider.of<UserModel>(context).profileImageUrl.toString() ?? ''
+                                    Provider.of<UserModel?>(context)!.profileImageUrl.toString() ?? ''
                                 ),
-                              ) : Icon(Icons.person_outlined,
+                              ) : const Icon(Icons.person_outlined,
                                 size: 40,),
                               ElevatedButton(
                                 onPressed: () async {
@@ -80,11 +80,10 @@ class _ProfileState extends State<Profile> {
                             ],
                           ),
                           Align(
-
                             alignment: Alignment.centerLeft,
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                                child: Text(Provider.of<UserModel>(context).name ?? '',
+                                child: Text(Provider.of<UserModel?>(context)!.name ?? '',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
