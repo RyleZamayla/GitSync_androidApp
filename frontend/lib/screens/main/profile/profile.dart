@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tweet_feed/models/posts.dart';
@@ -24,9 +25,12 @@ class _ProfileState extends State<Profile> {
   final String uid = ModalRoute.of(context)!.settings.arguments.toString();
 
   // print("link is: ${Provider.of<UserModel?>(context)?.bannerImageUrl.toString()}");
-
     return MultiProvider(
         providers: [
+          StreamProvider.value(
+            value: _userServices.isFollowing(FirebaseAuth.instance.currentUser?.uid, uid),
+            initialData: [ ],
+          ),
           StreamProvider<List<PostModel>>.value(
             value: _postService.getUserPost(uid),
             initialData: [ ],
@@ -72,11 +76,25 @@ class _ProfileState extends State<Profile> {
                                 ),
                               ) : const Icon(Icons.person_outlined,
                                 size: 40,),
-                              ElevatedButton(
-                                onPressed: () async {
-                                Navigator.pushNamed(context, '/edit');
+                              if(FirebaseAuth.instance.currentUser!.uid == uid)
+                                ElevatedButton(
+                                  onPressed: () async {
+                                  Navigator.pushNamed(context, '/edit');
+                                  }, child: const Text('Edit Profile')
+                                )
+                              else if(FirebaseAuth.instance.currentUser!.uid != uid && !Provider.of<bool>(context))
+                                ElevatedButton(
+                                    onPressed: () async {
+                                  _userServices.followUser(uid);
+                                  }, child: const Text('Follow')
+                                )
+                              else if(FirebaseAuth.instance.currentUser!.uid != uid && !Provider.of<bool>(context))
+                                  ElevatedButton(
+                                      onPressed: () async {
+                                        _userServices.unFollowUser(uid);
+                                      }, child: const Text('UnFollow')
+                                  )
 
-                              }, child: Text('Edit Profile'))
                             ],
                           ),
                           Align(
@@ -87,7 +105,6 @@ class _ProfileState extends State<Profile> {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
-                                  
                                 ),),
                               ),
                           )
@@ -98,9 +115,7 @@ class _ProfileState extends State<Profile> {
                 ))
               ];
             },
-
             // Tweets
-
             body: ListPost(),
           ),
         ),
