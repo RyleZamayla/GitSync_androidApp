@@ -54,8 +54,7 @@ class UserServices {
         .orderBy('creator')
         .startAt([searchData])
         .endAt([searchData + '\uf8ff'])
-        .limit(8)
-        .snapshots()
+        .limit(8).snapshots()
         .map(_userListFromQuerySnapshot);
   }
 
