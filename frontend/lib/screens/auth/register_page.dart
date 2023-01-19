@@ -13,15 +13,32 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _SignUpState extends State<RegisterPage> {
+
   final Authentication _authService = Authentication();
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   String email = '', password = '';
   late bool _password;
+
+  final FocusNode _emailfocusNode = FocusNode();
+  final FocusNode _passwordfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _password = false;
+    _emailfocusNode.addListener(_onFocusChange);
+    _passwordfocusNode.addListener(_onFocusChange);
+    email = _emailController.text;
+    password = _passwordController.text;
   }
+
+  void _onFocusChange() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,8 +63,16 @@ class _SignUpState extends State<RegisterPage> {
               const Text('Create an account.', style: TextStyle(color: CupertinoColors.white, fontSize: 27, fontWeight: FontWeight.bold),),
               const SizedBox(height: 20,),
               TextFormField(
+                controller: _emailController,
+                focusNode: _emailfocusNode,
                 style: const TextStyle(color: CupertinoColors.systemGrey2),
                 decoration: InputDecoration(
+                  suffixIcon: _emailfocusNode.hasFocus ? IconButton(icon: const Icon(Icons.clear_outlined),
+                    onPressed: (){
+                      setState(() {
+                        _emailController.clear();
+                      });
+                    },) : null,
                   prefixIcon: const Icon(Icons.email_outlined, color: Colors.grey,),
                   labelText: 'Email',
                   labelStyle: const TextStyle(color: CupertinoColors.systemGrey2),
@@ -68,6 +93,8 @@ class _SignUpState extends State<RegisterPage> {
               ),
               const SizedBox(height: 20,),
               TextFormField(
+                controller: _passwordController,
+                focusNode: _passwordfocusNode,
                 obscureText: !_password,
                 enableSuggestions: false,
                 autocorrect: false,
@@ -86,14 +113,14 @@ class _SignUpState extends State<RegisterPage> {
                     borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: CupertinoColors.activeBlue,)
                   ),
-                  suffixIcon: IconButton(
-                    icon: Icon(_password ? Icons.visibility : Icons.visibility_off, color: CupertinoColors.systemGrey, size: 20,),
-                    onPressed: () {
-                      setState(() {
-                        _password = !_password;
-                      });
-                    },
-                  ),
+                    suffixIcon: _passwordfocusNode.hasFocus ? IconButton(
+                      icon: Icon(_password ? Icons.visibility : Icons.visibility_off, color: CupertinoColors.systemGrey, size: 20,),
+                      onPressed: () {
+                        setState(() {
+                          _password = !_password;
+                        });
+                      },
+                    ) : null
                 ),
                 onChanged: (val) => setState(() {
                   password = val;

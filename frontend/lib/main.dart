@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:tweet_feed/catcher.dart';
 import 'package:tweet_feed/models/user.dart';
 import 'package:tweet_feed/screens/splash_screen.dart';
 import 'package:tweet_feed/services/auth.dart';
@@ -40,7 +41,10 @@ class MyApp extends StatelessWidget {
                 )
             );
           }
-          return const Text("Loading");
+          return const MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: FirebaseError(),
+          );
         }
     );
   }
