@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Lottie.asset(
               'assets/splash/programming_comp.json',
               onLoaded: (composition){
-                Future.delayed(const Duration(seconds: 0.15), (){
+                Future.delayed(const Duration(seconds: 2), (){
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const Wrapper()));
                 });
               }

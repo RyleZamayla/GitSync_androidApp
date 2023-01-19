@@ -61,7 +61,7 @@ class _SignInState extends State<LoginPage> {
               const SizedBox(height: 35,),
               TextFormField(
                 controller: _emailController,
-                focusNode: _emailFocusNode,
+                focusNode: _emailfocusNode,
                 style: const TextStyle(color: CupertinoColors.systemGrey2),
                 decoration: InputDecoration(
                   suffixIcon: _emailfocusNode.hasFocus ? IconButton(icon: const Icon(Icons.clear_outlined),
