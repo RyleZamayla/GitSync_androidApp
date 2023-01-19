@@ -49,11 +49,11 @@ class _SignInState extends State<LoginPage> {
           child: ListView(
             children: [
               const Text('Git sync to everyone in the branch.',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 27,
-                    fontWeight: FontWeight.bold
-                )
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 27,
+                      fontWeight: FontWeight.bold
+                  )
               ),
               const SizedBox(height: 35,),
               TextFormField(
@@ -62,29 +62,29 @@ class _SignInState extends State<LoginPage> {
                 style: const TextStyle(color: CupertinoColors.systemGrey2),
                 decoration: InputDecoration(
                   suffixIcon: _emailfocusNode.hasFocus ? IconButton(icon: const Icon(Icons.clear_outlined),
-                  onPressed: (){
-                    setState(() {
-                      _emailController.clear();
-                    });
-                  },) : null,
+                    onPressed: (){
+                      setState(() {
+                        _emailController.clear();
+                      });
+                    },) : null,
                   prefixIcon: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 200),
-                    transitionBuilder: (Widget child , Animation <double> animation) {
-                      return ScaleTransition(scale: animation, child: child);
-                    },
-                    child: _emailfocusNode.hasFocus ? null : const Icon(Icons.email_outlined, color: Colors.grey)
+                      duration: const Duration(milliseconds: 200),
+                      transitionBuilder: (Widget child , Animation <double> animation) {
+                        return ScaleTransition(scale: animation, child: child);
+                      },
+                      child: _emailfocusNode.hasFocus ? null : const Icon(Icons.email_outlined, color: Colors.grey)
                   ),
                   labelText: 'Email',
                   labelStyle: const TextStyle(color: CupertinoColors.systemGrey2),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey
-                    ),
-                    borderRadius: BorderRadius.circular(10)
+                      borderSide: const BorderSide(
+                          color: Colors.grey
+                      ),
+                      borderRadius: BorderRadius.circular(10)
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: CupertinoColors.activeBlue,)
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: CupertinoColors.activeBlue,)
                   ),
                 ),
                 onChanged: (val) => setState(() {
@@ -100,33 +100,33 @@ class _SignInState extends State<LoginPage> {
                 autocorrect: false,
                 style: const TextStyle(color: CupertinoColors.systemGrey2),
                 decoration: InputDecoration(
-                  prefixIcon: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 200),
-                    transitionBuilder: (Widget child , Animation <double> animation) {
-                      return ScaleTransition(scale: animation, child: child);
-                    },
-                    child: _passwordfocusNode.hasFocus ? null :  const Icon(Icons.lock_outline, color: Colors.grey),
-                  ),
-                  labelText: 'Password',
-                  labelStyle: const TextStyle(color: CupertinoColors.systemGrey2),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: Colors.grey
-                      ),
-                      borderRadius: BorderRadius.circular(10)
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: CupertinoColors.activeBlue,)
-                  ),
-                  suffixIcon: _passwordfocusNode.hasFocus ? IconButton(
-                    icon: Icon(_password ? Icons.visibility : Icons.visibility_off, color: CupertinoColors.systemGrey, size: 20,),
-                    onPressed: () {
-                      setState(() {
-                        _password = !_password;
-                      });
-                    },
-                  ) : null
+                    prefixIcon: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 200),
+                      transitionBuilder: (Widget child , Animation <double> animation) {
+                        return ScaleTransition(scale: animation, child: child);
+                      },
+                      child: _passwordfocusNode.hasFocus ? null :  const Icon(Icons.lock_outline, color: Colors.grey),
+                    ),
+                    labelText: 'Password',
+                    labelStyle: const TextStyle(color: CupertinoColors.systemGrey2),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            color: Colors.grey
+                        ),
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: CupertinoColors.activeBlue,)
+                    ),
+                    suffixIcon: _passwordfocusNode.hasFocus ? IconButton(
+                      icon: Icon(_password ? Icons.visibility : Icons.visibility_off, color: CupertinoColors.systemGrey, size: 20,),
+                      onPressed: () {
+                        setState(() {
+                          _password = !_password;
+                        });
+                      },
+                    ) : null
                 ),
                 onChanged: (val) => setState(() {
                   password = val;
@@ -172,21 +172,21 @@ class _SignInState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: const <Widget>[
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: const <Widget>[
                                   Icon(Icons.info_outline_rounded, color: Colors.white,),
                                   SizedBox(width: 10,),
                                   Text('Login Successful.', style: TextStyle(color: Colors.white),)
                                 ]
-                              ),
-                            ), behavior: SnackBarBehavior.floating,
-                          ),
+                            ),
+                          ), behavior: SnackBarBehavior.floating,
                         ),
+                      ),
                       Future.delayed(const Duration(seconds: 5),(){}),
                     },
 
 
-              },
+                  },
                   child: const Text("Login", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold),)
               ),
               Row(
@@ -235,10 +235,10 @@ class _SignInState extends State<LoginPage> {
                     ),
                     SizedBox(width: 10),
                     Text("Continue with Google",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: CupertinoColors.black,
-                        fontWeight: FontWeight.bold)
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: CupertinoColors.black,
+                            fontWeight: FontWeight.bold)
                     )
                   ],
                 ),
@@ -291,4 +291,3 @@ class _SignInState extends State<LoginPage> {
     );
   }
 }
-
