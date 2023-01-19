@@ -29,13 +29,12 @@ class PostService {
 
   Future<List<PostModel>> getFeed() async {
 
-    List<String> usersFollowing =  await UserServices() 
-        .getUserFollowing(FirebaseAuth.instance.currentUser?.uid);
+    List<String> usersFollowing =  await UserServices().getUserFollowing(FirebaseAuth.instance.currentUser?.uid);
 
     var splitUsersFollowing = partition<dynamic>(usersFollowing, 10); //size array
     inspect(splitUsersFollowing);
 
-  List<PostModel> feedList = [];
+    List<PostModel> feedList = [];
 
     for (int i =0; i< splitUsersFollowing.length ; i++) {
       inspect(splitUsersFollowing.elementAt(i));
@@ -64,6 +63,4 @@ class PostService {
       'timestamp' : FieldValue.serverTimestamp()
     });
   }
-
-
 }

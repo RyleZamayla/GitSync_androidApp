@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tweet_feed/models/posts.dart';
 import 'package:tweet_feed/screens/main/posts/list.dart';
@@ -14,7 +13,7 @@ class Feed extends StatefulWidget {
 
 class _FeedState extends State<Feed> {
 
-  PostService _postService = PostService();
+  final PostService _postService = PostService();
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +25,9 @@ class _FeedState extends State<Feed> {
             initialData: [],
     ),
     ],
-      child: Scaffold(
+      child: const Scaffold(
           body: ListPost()
       ),
     );
   }
 }
-

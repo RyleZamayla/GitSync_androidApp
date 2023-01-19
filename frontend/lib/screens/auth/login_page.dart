@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tweet_feed/screens/auth/register_page.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import 'package:tweet_feed/services/auth.dart';
 import 'package:flutter/gestures.dart';
+import 'package:lottie/lottie.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -48,17 +50,18 @@ class _SignInState extends State<LoginPage> {
           padding: const EdgeInsets.only(top: 90, right: 20, left: 20),
           child: ListView(
             children: [
+              Lottie.asset('assets/splash/mobile_dev.json', width: 170, height: 170),
               const Text('Git sync to everyone in the branch.',
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 27,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold
                   )
               ),
               const SizedBox(height: 35,),
               TextFormField(
                 controller: _emailController,
-                focusNode: _emailfocusNode,
+                focusNode: _emailFocusNode,
                 style: const TextStyle(color: CupertinoColors.systemGrey2),
                 decoration: InputDecoration(
                   suffixIcon: _emailfocusNode.hasFocus ? IconButton(icon: const Icon(Icons.clear_outlined),
@@ -254,7 +257,7 @@ class _SignInState extends State<LoginPage> {
                           text: '    Signup',
                           style: const TextStyle(color: CupertinoColors.systemBlue, fontSize: 13),
                           recognizer: TapGestureRecognizer()..onTap = () {
-                            ///RegisterPage();
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const RegisterPage()));
                           }
                       ),
                     ],
@@ -291,3 +294,4 @@ class _SignInState extends State<LoginPage> {
     );
   }
 }
+
