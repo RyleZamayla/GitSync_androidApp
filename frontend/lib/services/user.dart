@@ -24,12 +24,28 @@ class UserServices {
   UserModel? _firebaseUser(DocumentSnapshot snapshot){
     final data = snapshot.data()! as Map<String,dynamic>;
     return snapshot != null ? UserModel(
-      id: snapshot.id,
-      name: data['name'],
-      profileImageUrl: data['profileImageUrl'],
-      bannerImageUrl: data['bannerImageUrl'],
-      email: data['email']
+        id: snapshot.id,
+        name: data['name'],
+        profileImageUrl: data['profileImageUrl'],
+        bannerImageUrl: data['bannerImageUrl'],
+        email: data['email']
     ) : null;
+  }
+
+  Stream <UserModel?> getUserInfo(uid) {
+    return FirebaseFirestore.instance.collection('users').doc(uid).snapshots().map(_firebaseUser);
+  }
+
+  Future<List<String>> getUserFollowing(uid) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('following')
+        .get();
+
+    final users = querySnapshot.docs.map((doc ) => doc.id).toList();
+    return users;
+
   }
 
   Stream <List<UserModel?>> queryByName(searchData) {
@@ -43,39 +59,24 @@ class UserServices {
         .map(_userListFromQuerySnapshot);
   }
 
-  Stream <UserModel?> getUserInfo(uid) {
-    return FirebaseFirestore.instance.collection('users').doc(uid).snapshots().map(_firebaseUser);
-  }
-
   Future <void> updateProfile(File _bannerImage, _profileImage, String name) async {
     String bannerImageUrl = '', profileImageUrl = '';
-    Map<String, Object> data = HashMap();
-
     if (_bannerImage != null){
       bannerImageUrl = await _utilityService.uploadFile(
           _bannerImage,
           'usersProfiles/${FirebaseAuth.instance.currentUser!.uid}/banner');
-      data['bannerImageUrl'] = bannerImageUrl;
     }
-
     if (_profileImage != null){
       profileImageUrl = await _utilityService.uploadFile(
           _profileImage,
           'usersProfiles/${FirebaseAuth.instance.currentUser!.uid}/profile');
-      data['profileImageUrl'] = profileImageUrl;
     }
+    Map<String, Object> data = HashMap();
+    if (name != '') data['name'] = name;
+    if (profileImageUrl != '') data['profileImageUrl'] = profileImageUrl;
+    if (bannerImageUrl != '') data['bannerImageUrl'] = bannerImageUrl;
 
-    if (name.isNotEmpty) data['name'] = name;
 
-    // Map<String, Object> data = HashMap<String, Object>();
-    // data.putIfAbsent("name", name);
-    // data.putIfAbsent("profileImageUrl", profileImageUrl);
-    // data.putIfAbsent("bannerImageUrl", bannerImageUrl);
-
-    // Map<String, Object> data = {};
-    // data["name"] = (name.isNotEmpty ? name : null) as Object;
-    // data["profileImageUrl"] = (profileImageUrl.isNotEmpty ? profileImageUrl : null) as Object;
-    // data["bannerImageUrl"] = (bannerImageUrl.isNotEmpty ? bannerImageUrl : null) as Object;
 
     await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update(data);
   }
