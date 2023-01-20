@@ -140,8 +140,8 @@ class _SignInState extends State<LoginPage> {
                       TextSpan(
                           text: 'Forgot password?',
                           style: const TextStyle(
-                              color: CupertinoColors.systemBlue,
-                              fontSize: 13,
+                              color: CupertinoColors.activeBlue,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                               fontStyle: FontStyle.italic
                           ),

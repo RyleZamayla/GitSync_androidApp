@@ -74,7 +74,7 @@ class _ScreenState extends State<CustomSplashScreen> with TickerProviderStateMix
           ),
           Center(
             child: AnimatedOpacity(
-              opacity: splashLoad? 1.0 : 0.0,
+              opacity: showLabel? 1.0 : 0.0,
               duration: const Duration(seconds: 1),
               child: const Text(
                   'Git-Sync',

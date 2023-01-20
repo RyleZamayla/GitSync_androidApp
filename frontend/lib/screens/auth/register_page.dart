@@ -170,7 +170,7 @@ class _SignUpState extends State<RegisterPage> {
                     if(password == passwordConfirm){
                       _authService.register(email, password),
                       setState(() => isSubmit = true),
-                      Future.delayed(const Duration(seconds: 3),() => setState(() {
+                      Future.delayed(const Duration(seconds: 4),() => setState(() {
                         isSubmit = false;
                         Flushbar(
                           flushbarPosition: FlushbarPosition.TOP,

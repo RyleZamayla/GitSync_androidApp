@@ -68,8 +68,8 @@ class Authentication {
 
   Future logout() async {
     try {
+      googleSignIn.disconnect();
       await auth.signOut();
-      await googleSignIn.signOut();
       } catch (e) { if (kDebugMode) {
         print(e.toString());
       }
