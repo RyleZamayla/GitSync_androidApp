@@ -78,6 +78,7 @@ class _SignUpState extends State<RegisterPage> {
                   email = val;
                 }),
               ),
+              const SizedBox(height: 20,),
               TextFormField(
                 obscureText: !_password,
                 enableSuggestions: false,
