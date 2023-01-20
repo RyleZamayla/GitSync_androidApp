@@ -212,6 +212,20 @@
             </list>
           </value>
         </entry>
+        <entry key="flutter_zoom_drawer">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../../DevTools/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_zoom_drawer-3.0.3/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="font_awesome_flutter">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../../DevTools/flutter/.pub-cache/hosted/pub.dartlang.org/font_awesome_flutter-10.3.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="http">
           <value>
             <list>
@@ -452,6 +466,8 @@
       <root url="file://$PROJECT_DIR$/../../../../DevTools/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-2.0.1/lib" />
       <root url="file://$PROJECT_DIR$/../../../../DevTools/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.7/lib" />
       <root url="file://$PROJECT_DIR$/../../../../DevTools/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_spinkit-5.1.0/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../DevTools/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_zoom_drawer-3.0.3/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../DevTools/flutter/.pub-cache/hosted/pub.dartlang.org/font_awesome_flutter-10.3.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../DevTools/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.5/lib" />
       <root url="file://$PROJECT_DIR$/../../../../DevTools/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.2/lib" />
       <root url="file://$PROJECT_DIR$/../../../../DevTools/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.8.6/lib" />

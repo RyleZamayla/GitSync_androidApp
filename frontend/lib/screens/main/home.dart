@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tweet_feed/screens/home/feed.dart';
 import 'package:tweet_feed/screens/home/search.dart';
-import 'package:tweet_feed/services/auth.dart';
+import 'package:tweet_feed/screens/main/drawer.dart';
+
 
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
@@ -14,11 +14,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  final Authentication _authService = Authentication();
   int _currentIndex = 0;
+
   final List <Widget> _children = [
-    Feed(),
-    Search()
+    const Feed(),
+    const Search()
   ];
 
   void onPressedTab(int index){
@@ -31,34 +31,16 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("home")
+        title: const Text("home"),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: (){
             Navigator.pushNamed(context, '/add');
           },
           child: const Icon(Icons.add)),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            const DrawerHeader(
-                child: Text('Drawer Header'),
-                decoration: BoxDecoration(
-                    color: Colors.blue)
-            ),
-            ListTile(
-              title: Text('Profile'),
-              onTap: (){
-                Navigator.pushNamed(context, '/profile', arguments: FirebaseAuth.instance.currentUser!.uid);
-              },
-            ),
-            ListTile(
-                title: Text('Logout'),
-                onTap: () async {
-                  await _authService.logout();
-                }
-            )
-          ],
+      drawer: const Drawer(
+        child: DrawerPage(
+
         ),
       ),
       body: _children[_currentIndex],
@@ -67,7 +49,7 @@ class _HomeState extends State<Home> {
         currentIndex: _currentIndex,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        items: [
+        items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search')
         ],

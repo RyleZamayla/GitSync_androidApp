@@ -26,7 +26,9 @@ class _ListPostState extends State<ListPost> {
             stream: _userServices.getUserInfo(post.creatorID),
             builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
               if (!snapshot.hasData) {
-                return const Center(child: CircularProgressIndicator());
+                return const Padding(
+                  padding: EdgeInsets.all(20),
+                    child: Center(child: CircularProgressIndicator()));
               }
               return ListTile(
                 title: Padding(

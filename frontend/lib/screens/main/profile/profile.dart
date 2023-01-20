@@ -22,9 +22,6 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
 
   final String uid = ModalRoute.of(context)!.settings.arguments.toString();
-
-  // print("link is: ${Provider.of<UserModel?>(context)?.bannerImageUrl.toString()}");
-
     return MultiProvider(
         providers: [
           StreamProvider<List<PostModel>>.value(
@@ -76,7 +73,7 @@ class _ProfileState extends State<Profile> {
                                 onPressed: () async {
                                 Navigator.pushNamed(context, '/edit');
 
-                              }, child: Text('Edit Profile'))
+                              }, child: const Text('Edit Profile'))
                             ],
                           ),
                           Align(
@@ -98,10 +95,9 @@ class _ProfileState extends State<Profile> {
                 ))
               ];
             },
-
             // Tweets
 
-            body: ListPost(),
+            body: const ListPost(),
           ),
         ),
       ),

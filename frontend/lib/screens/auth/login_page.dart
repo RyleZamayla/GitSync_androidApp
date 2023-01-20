@@ -56,7 +56,7 @@ class _SignInState extends State<LoginPage> {
                 const Text('Git sync to everyone in the branch.',
                     style: TextStyle(
                         color: Colors.grey,
-                        fontSize: 14,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold
                     )
                 ),
