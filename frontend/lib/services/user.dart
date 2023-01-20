@@ -7,7 +7,7 @@ import 'package:tweet_feed/services/utility.dart';
 
 class UserServices {
 
-  UtilityService _utilityService = UtilityService();
+  final UtilityService _utilityService = UtilityService();
 
   List<UserModel?> _userListFromQuerySnapshot(QuerySnapshot<Map<String, dynamic>> snapshot) {
     return snapshot.docs.map((doc){

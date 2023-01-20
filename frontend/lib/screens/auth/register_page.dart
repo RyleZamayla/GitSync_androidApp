@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:wave/config.dart';
@@ -14,14 +15,18 @@ class RegisterPage extends StatefulWidget {
 
 class _SignUpState extends State<RegisterPage> {
   final Authentication _authService = Authentication();
-  String email = '', password = '';
-  late bool _password;
+  String email = '', password = '', passwordConfirm = '';
+  late bool _password, _passwordConfirm;
+  bool isSubmit = false;
+  int charCount = 0;
 
   @override
   void initState() {
     super.initState();
     _password = false;
+    _passwordConfirm = false;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +52,7 @@ class _SignUpState extends State<RegisterPage> {
               const SizedBox(height: 20,),
               TextFormField(
                 style: const TextStyle(color: CupertinoColors.systemGrey2),
+                maxLength: 50,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.email_outlined, color: Colors.grey,),
                   labelText: 'Email',
@@ -61,12 +67,17 @@ class _SignUpState extends State<RegisterPage> {
                     borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: CupertinoColors.activeBlue,)
                   ),
+                  counterStyle: const TextStyle(
+                    color: CupertinoColors.activeBlue,
+                    fontSize: 12,
+                  ),
+                  counterText: null,
                 ),
                 onChanged: (val) => setState(() {
+                  charCount = charCount + 1;
                   email = val;
                 }),
               ),
-              const SizedBox(height: 20,),
               TextFormField(
                 obscureText: !_password,
                 enableSuggestions: false,
@@ -100,55 +111,118 @@ class _SignUpState extends State<RegisterPage> {
                 }),
               ),
               const SizedBox(height: 20,),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(35),
-                    ),
-                  ),
-                  onPressed: () async=>{
-                    _authService.register(email, password),
-                    Navigator.pop(context),
-                    /**if (email.isNotEmpty || password.isNotEmpty){
-                      _authService.register(email, password),
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Register account successfully.'),
-                        ),
+              TextFormField(
+                obscureText: !_passwordConfirm,
+                enableSuggestions: false,
+                autocorrect: false,
+                style: const TextStyle(color: CupertinoColors.systemGrey2),
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.lock_outline, color: Colors.grey,),
+                  labelText: 'Confirm password',
+                  labelStyle: const TextStyle(color: CupertinoColors.systemGrey2),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          color: Colors.grey
                       ),
-                    }**/
-                    /**if(email.isNotEmpty || password.isNotEmpty){
-                        _authService.login(email, password),_authService.register(email, password),
-                        ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                        content: Container(
-                        decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.grey.shade900,
+                      borderRadius: BorderRadius.circular(10)
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: CupertinoColors.activeBlue,)
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(_passwordConfirm ? Icons.visibility : Icons.visibility_off, color: CupertinoColors.systemGrey, size: 20,),
+                    onPressed: () {
+                      setState(() {
+                        _passwordConfirm = !_passwordConfirm;
+                      });
+                    },
+                  ),
+                ),
+                onChanged: (val) => setState(() {
+                  passwordConfirm = val;
+                }),
+              ),
+              const SizedBox(height: 20,),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(40),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(35),
+                  ),
+                ),
+                child: isSubmit ?
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: CircularProgressIndicator(color: CupertinoColors.white,),
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Creating account...')
+                  ],
+                ) : const Text("Register", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold),),
+                onPressed: () async =>{
+                  if(email.isNotEmpty || password.isNotEmpty){
+                    if(password == passwordConfirm){
+                      _authService.register(email, password),
+                      setState(() => isSubmit = true),
+                      Future.delayed(const Duration(seconds: 3),() => setState(() {
+                        isSubmit = false;
+                        Flushbar(
+                          flushbarPosition: FlushbarPosition.TOP,
+                          title: 'Hey Developer!',
+                          message: "Welcome to synchronous branch.",
+                          dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                          duration: const Duration(seconds: 3),
+                          leftBarIndicatorColor: CupertinoColors.activeBlue,
+                          icon: const Icon(
+                            Icons.info_outline,
+                            size: 28.0,
+                            color: CupertinoColors.activeBlue,
+                          ),
+                        ).show(context);
+                      })),
+                    } else{
+                      setState(() => isSubmit = true),
+                      Future.delayed(const Duration(seconds: 2),() => setState(() {
+                        isSubmit = false;
+                        Flushbar(
+                          flushbarPosition: FlushbarPosition.TOP,
+                          message: "Password does not match.",
+                          dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                          duration: const Duration(seconds: 3),
+                          leftBarIndicatorColor: CupertinoColors.activeOrange,
+                          icon: const Icon(
+                            Icons.info_outline,
+                            size: 28.0,
+                            color: CupertinoColors.activeOrange,
+                          ),
+                        ).show(context);
+                      })),
+                    }
+                  } else {
+                    setState(() => isSubmit = true),
+                    await Future.delayed(const Duration(seconds: 3),() => setState(() {
+                      isSubmit = false;
+                      Flushbar(
+                        flushbarPosition: FlushbarPosition.TOP,
+                        message: "Missing required field",
+                        margin: const EdgeInsets.all(10),
+                        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                        duration: const Duration(seconds: 2),
+                        leftBarIndicatorColor: CupertinoColors.activeOrange,
+                        icon: const Icon(
+                          Icons.info_outline,
+                          size: 28.0,
+                          color: CupertinoColors.activeOrange,
                         ),
-                        child: const Text('Required field can''t be empty.'),
-                        ),
-                        behavior: SnackBarBehavior.floating,
-                        )
-                        )
-                        } else {
-                        ///dli nko ma trace ang authentication kai wla ko aha na file
-                        if (authentication of account is invalid){
-                        ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                        content: Container(
-                        color: Colors.grey.shade900,
-                        decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Text('Invalid username and password.'),
-                        ),
-                        )
-                        )
-                        }
-                        } **/
-                  },
-                  child: const Text("Register", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold),)
+                      ).show(context);
+                    })),
+                  }
+                },
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20),
@@ -159,7 +233,7 @@ class _SignUpState extends State<RegisterPage> {
                     children: <TextSpan> [
                       TextSpan(
                         text: '    Sign in',
-                        style: const TextStyle(color: CupertinoColors.systemBlue, fontSize: 13),
+                        style: const TextStyle(color: CupertinoColors.activeBlue, fontSize: 13),
                         recognizer: TapGestureRecognizer()..onTap = () {
                           Navigator.pop(context);
                         }
