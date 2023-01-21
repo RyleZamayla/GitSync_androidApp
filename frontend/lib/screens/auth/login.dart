@@ -1,8 +1,8 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tweet_feed/screens/auth/password_reset.dart';
-import 'package:tweet_feed/screens/auth/register_page.dart';
+import 'package:tweet_feed/screens/auth/reset_password.dart';
+import 'package:tweet_feed/screens/auth/register.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import 'package:tweet_feed/services/auth.dart';
@@ -21,13 +21,11 @@ class _SignInState extends State<LoginPage> {
   final Authentication _authService = Authentication();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-
   String email = '', password = '';
   late bool _password;
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
-  bool isLogIn = false;
+  bool isLogIn = false, isPressed = false;
 
   @override
   void initState() {
@@ -42,8 +40,13 @@ class _SignInState extends State<LoginPage> {
     setState(() {});
   }
   @override
+  void dispose() {
+    super.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color.fromRGBO(5, 26, 47, 1.0),
       body: Form(
@@ -51,18 +54,16 @@ class _SignInState extends State<LoginPage> {
           padding: const EdgeInsets.all(20),
           child: ListView(
             children: [
-              Lottie.asset(
-                'assets/splash/programming_comp.json',
+              Lottie.asset('assets/splash/programming_comp.json',
                 width: 200, height: 200,
               ),
-              const Text(
-                'Git sync to everyone in the branch.',
-                 style: TextStyle(
-                   fontFamily: 'Ubuntu',
-                   color: CupertinoColors.systemGrey2,
-                   fontSize: 17,
-                   fontWeight: FontWeight.bold
-                 )
+              const Text('Git sync to everyone in the branch.',
+                  style: TextStyle(
+                      fontFamily: 'Ubuntu',
+                      color: CupertinoColors.systemGrey2,
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold
+                  )
               ),
               const SizedBox(height: 35,),
               TextFormField(
@@ -105,27 +106,27 @@ class _SignInState extends State<LoginPage> {
                 autocorrect: false,
                 style: const TextStyle(color: CupertinoColors.systemGrey2),
                 decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.lock_outline, color: Colors.grey),
-                    labelText: 'Password',
-                    labelStyle: const TextStyle(color: CupertinoColors.systemGrey2),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Colors.grey
-                        ),
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: CupertinoColors.activeBlue,)
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(_password ? Icons.visibility : Icons.visibility_off, color: CupertinoColors.systemGrey, size: 20,),
-                      onPressed: () {
-                        setState(() {
-                          _password = !_password;
-                        });
-                      },
-                    )
+                  prefixIcon: const Icon(Icons.lock_outline, color: Colors.grey),
+                  labelText: 'Password',
+                  labelStyle: const TextStyle(color: CupertinoColors.systemGrey2),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          color: Colors.grey
+                      ),
+                      borderRadius: BorderRadius.circular(10)
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: CupertinoColors.activeBlue,)
+                  ),
+                  suffixIcon: _passwordFocusNode.hasFocus ? IconButton(
+                    icon: Icon(_password ? Icons.visibility : Icons.visibility_off, color: CupertinoColors.systemGrey, size: 20,),
+                    onPressed: (){
+                      setState(() {
+                        _password = !_password;
+                      });
+                    },
+                  ) : null,
                 ),
                 onChanged: (val) => setState(() {
                   password = val;
@@ -142,7 +143,6 @@ class _SignInState extends State<LoginPage> {
                           style: const TextStyle(
                               color: CupertinoColors.activeBlue,
                               fontSize: 14,
-                              fontWeight: FontWeight.bold,
                               fontStyle: FontStyle.italic
                           ),
                           recognizer: TapGestureRecognizer()..onTap = () {
@@ -160,23 +160,10 @@ class _SignInState extends State<LoginPage> {
                     borderRadius: BorderRadius.circular(35),
                   ),
                 ),
-                child: isLogIn ?
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    SizedBox(
-                      height: 25,
-                      width: 25,
-                      child: CircularProgressIndicator(color: CupertinoColors.white,),
-                    ),
-                    SizedBox(width: 20,),
-                    Text('Signing in...')
-                  ],
-                ) : const Text("Login", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold),),
                 onPressed: () async => {
-                  if(email.isNotEmpty || password.isNotEmpty){
+                  if(email.isNotEmpty && password.isNotEmpty){
                     setState(() => isLogIn = true),
-                    Future.delayed(const Duration(seconds: 3),() => setState(() {
+                    Future.delayed(const Duration(seconds: 4),() => setState(() {
                       isLogIn = false;
                       Flushbar(
                         flushbarPosition: FlushbarPosition.TOP,
@@ -192,6 +179,7 @@ class _SignInState extends State<LoginPage> {
                         ),
                       ).show(context);
                       _authService.login(email, password);
+                      //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Wrapper()));
                     })),
                   } else {
                     setState(() => isLogIn = true),
@@ -213,6 +201,19 @@ class _SignInState extends State<LoginPage> {
                     })),
                   }
                 },
+                child: isLogIn ?
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    SizedBox(
+                      height: 25,
+                      width: 25,
+                      child: CircularProgressIndicator(color: CupertinoColors.white,),
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Signing in...')
+                  ],
+                ) : const Text("Login", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold),),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -249,8 +250,8 @@ class _SignInState extends State<LoginPage> {
                       borderRadius: BorderRadius.circular(35),
                     )
                 ),
-                onPressed: (){
-                  _authService.signInWithGoogle(context);
+                onPressed: ()async =>{
+                  _authService.signInWithGoogle(),
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -270,15 +271,15 @@ class _SignInState extends State<LoginPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.only(top: 10),
                 child: RichText(
                   text: TextSpan(
                     text: 'Don''t have an account?',
-                    style: const TextStyle(color: CupertinoColors.systemGrey2, fontSize: 13),
+                    style: const TextStyle(color: CupertinoColors.systemGrey2, fontSize: 14),
                     children: <TextSpan> [
                       TextSpan(
                           text: '    Signup',
-                          style: const TextStyle(color: CupertinoColors.activeBlue, fontSize: 13),
+                          style: const TextStyle(color: CupertinoColors.activeBlue, fontSize: 14),
                           recognizer: TapGestureRecognizer()..onTap = () {
                             Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterPage()));
                           }

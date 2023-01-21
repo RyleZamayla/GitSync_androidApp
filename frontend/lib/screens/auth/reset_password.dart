@@ -53,7 +53,7 @@ class _ResetScreenState extends State<ResetScreen> {
                       fontWeight: FontWeight.bold
                   )
               ),
-              const SizedBox(height: 35,),
+              const SizedBox(height: 10,),
               TextFormField(
                 style: const TextStyle(color: CupertinoColors.systemGrey2),
                 maxLength: 50,
@@ -109,7 +109,7 @@ class _ResetScreenState extends State<ResetScreen> {
                       isLoading = false;
                       Flushbar(
                         flushbarPosition: FlushbarPosition.BOTTOM,
-                        message: "Request link is sent to $email",
+                        message: "Request link is sent to your email",
                         dismissDirection: FlushbarDismissDirection.HORIZONTAL,
                         duration: const Duration(seconds: 3),
                         leftBarIndicatorColor: CupertinoColors.activeBlue,
@@ -131,11 +131,11 @@ class _ResetScreenState extends State<ResetScreen> {
                         margin: const EdgeInsets.all(10),
                         dismissDirection: FlushbarDismissDirection.HORIZONTAL,
                         duration: const Duration(seconds: 2),
-                        leftBarIndicatorColor: CupertinoColors.activeBlue,
+                        leftBarIndicatorColor: CupertinoColors.activeOrange,
                         icon: const Icon(
                           Icons.info_outline,
                           size: 28.0,
-                          color: CupertinoColors.activeBlue,
+                          color: CupertinoColors.activeOrange,
                         ),
                       ).show(context);
                     })),
