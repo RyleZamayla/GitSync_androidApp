@@ -103,7 +103,7 @@ class UserServices {
   }
 
   Future <void> updateProfile(File _bannerImage, _profileImage, String name) async {
-    String bannerImageUrl = '', profileImageUrl = '';
+    String? bannerImageUrl = '', profileImageUrl = '';
     if (_bannerImage != null){
       bannerImageUrl = await _utilityService.uploadFile(
           _bannerImage,
@@ -114,11 +114,20 @@ class UserServices {
           _profileImage,
           'usersProfiles/${FirebaseAuth.instance.currentUser!.uid}/profile');
     }
-    Map<String, Object> data = HashMap();
+
+    Map<String,dynamic> data = HashMap();
     if (name != '') data['name'] = name;
     if (profileImageUrl != '') data['profileImageUrl'] = profileImageUrl;
     if (bannerImageUrl != '') data['bannerImageUrl'] = bannerImageUrl;
 
+//      UserModel data = UserModel(profileImageUrl: profileImageUrl, bannerImageUrl: bannerImageUrl, name: name);
+    // UserModel user = UserModel(
+    //     id: data['id'],
+    //     name: data['name'],
+    //     bannerImageUrl: data['bannerImageUrl'],
+    //     profileImageUrl: data['profileImageUrl'],
+    //     email: data['email']
+    // );
 
 
     await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update(data);

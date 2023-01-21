@@ -189,7 +189,9 @@ class _Edit extends State<Edit> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     OutlinedButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },
                         style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 50),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

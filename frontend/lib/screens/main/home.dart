@@ -5,7 +5,7 @@ import 'package:tweet_feed/screens/main/drawer.dart';
 
 
 class Home extends StatefulWidget {
-  Home({Key? key}) : super(key: key);
+  const Home({Key? key}) : super(key: key);
 
 
   @override
