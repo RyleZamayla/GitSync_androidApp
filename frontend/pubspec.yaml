@@ -76,6 +76,7 @@ flutter:
   assets:
     - assets/images/
     - assets/splash/
+    - assets/profile_pic/
   fonts:
     - family: Ubuntu
       fonts:
