@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tweet_feed/models/user.dart';
+import 'package:tweet_feed/screens/main/home.dart';
 
 
 class Authentication {
-
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final googleSignIn = GoogleSignIn();
 
   UserModel? _firebaseUser(User? user) {
     return user != null ? UserModel(id: user.uid) : null;
@@ -63,13 +66,40 @@ class Authentication {
     }
   }
 
-
   Future logout() async {
-    try { return await auth.signOut();
+    try {
+      googleSignIn.disconnect();
+      await auth.signOut();
       } catch (e) { if (kDebugMode) {
         print(e.toString());
       }
       return null;
+    }
+  }
+
+  Future<void> signInWithGoogle(context) async {
+    final googleAccount = await googleSignIn.signIn();
+    if(googleAccount != null){
+      final googleAuth = await googleAccount.authentication;
+      if(googleAuth.accessToken != null && googleAuth.idToken != null){
+        try{
+          await auth.signInWithCredential(
+            GoogleAuthProvider.credential(
+              idToken: googleAuth.idToken,
+              accessToken: googleAuth.accessToken
+            )
+          );
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home()));
+        } on FirebaseAuthException catch (error){
+          if (kDebugMode) {
+            print(error);
+          }
+        } catch (error){
+          if (kDebugMode) {
+            print(error);
+          }
+        } finally {}
+      }
     }
   }
 }
