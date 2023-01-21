@@ -1,6 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:tweet_feed/screens/wrapper.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import 'package:tweet_feed/services/auth.dart';
@@ -15,9 +16,12 @@ class RegisterPage extends StatefulWidget {
 
 class _SignUpState extends State<RegisterPage> {
   final Authentication _authService = Authentication();
-  String email = '', password = '', passwordConfirm = '';
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
+  final TextEditingController _emailController = TextEditingController();
   late bool _password, _passwordConfirm;
-  bool isSubmit = false;
+  String email = '', password = '', passwordConfirm = '';
+  bool isSubmit = false, isPressed = false;
   int charCount = 0;
 
   @override
@@ -25,8 +29,12 @@ class _SignUpState extends State<RegisterPage> {
     super.initState();
     _password = false;
     _passwordConfirm = false;
+    _emailFocusNode.addListener(_onFocusChange);
+    _passwordFocusNode.addListener(_onFocusChange);
   }
-
+  void _onFocusChange() {
+    setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,15 +53,52 @@ class _SignUpState extends State<RegisterPage> {
       backgroundColor: const Color.fromRGBO(5, 26, 47, 1.0),
       body: Form(
         child: Padding(
-          padding: const EdgeInsets.only(top: 90, right: 20, left: 20),
+          padding: const EdgeInsets.all(20),
           child: ListView(
             children: [
-              const Text('Create an account.', style: TextStyle(color: CupertinoColors.white, fontSize: 27, fontWeight: FontWeight.bold),),
+              ShaderMask(
+                blendMode: BlendMode.srcIn,
+                shaderCallback: (Rect bounds) => const LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment(3.7, 1),
+                  colors: <Color>[
+                    // Color(0xff1f005c),
+                    // Color(0xff5b0060),
+                    Color(0xff870160),
+                    Color(0xffac255e),
+                    // Color(0xffca485c),
+                    // Color(0xffe16b5c),
+                    // Color(0xfff39060),
+                    // Color(0xffffb56b),
+                  ],
+                  tileMode: TileMode.mirror,
+                ).createShader(bounds),
+                child: const Icon(
+                  CupertinoIcons.person_add_solid,
+                  size: 100,
+                ),
+              ),
+              const Center(
+                child: Text('Create an account.',
+                  style: TextStyle(
+                    color: CupertinoColors.white,
+                    fontSize: 20, fontWeight:
+                    FontWeight.bold
+                  ),
+                ),
+              ),
               const SizedBox(height: 20,),
               TextFormField(
                 style: const TextStyle(color: CupertinoColors.systemGrey2),
                 maxLength: 50,
                 decoration: InputDecoration(
+                  suffixIcon: _emailFocusNode.hasFocus ? IconButton(icon: const Icon(Icons.clear_outlined),
+                    onPressed: (){
+                      setState(() {
+                        _emailController.clear();
+                      });
+                    },
+                  ) : null,
                   prefixIcon: const Icon(Icons.email_outlined, color: Colors.grey,),
                   labelText: 'Email',
                   labelStyle: const TextStyle(color: CupertinoColors.systemGrey2),
@@ -78,13 +123,20 @@ class _SignUpState extends State<RegisterPage> {
                   email = val;
                 }),
               ),
-              const SizedBox(height: 20,),
               TextFormField(
                 obscureText: !_password,
                 enableSuggestions: false,
                 autocorrect: false,
                 style: const TextStyle(color: CupertinoColors.systemGrey2),
                 decoration: InputDecoration(
+                  suffixIcon: _passwordFocusNode.hasFocus ? IconButton(
+                    icon: Icon(_password ? Icons.visibility : Icons.visibility_off, color: CupertinoColors.systemGrey, size: 20,),
+                    onPressed: (){
+                      setState(() {
+                        _password = !_password;
+                      });
+                    },
+                  ) : null,
                   prefixIcon: const Icon(Icons.lock_outline, color: Colors.grey,),
                   labelText: 'Password',
                   labelStyle: const TextStyle(color: CupertinoColors.systemGrey2),
@@ -98,20 +150,12 @@ class _SignUpState extends State<RegisterPage> {
                     borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: CupertinoColors.activeBlue,)
                   ),
-                  suffixIcon: IconButton(
-                    icon: Icon(_password ? Icons.visibility : Icons.visibility_off, color: CupertinoColors.systemGrey, size: 20,),
-                    onPressed: () {
-                      setState(() {
-                        _password = !_password;
-                      });
-                    },
-                  ),
                 ),
                 onChanged: (val) => setState(() {
                   password = val;
                 }),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(height: 10,),
               TextFormField(
                 obscureText: !_passwordConfirm,
                 enableSuggestions: false,
@@ -131,14 +175,14 @@ class _SignUpState extends State<RegisterPage> {
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(color: CupertinoColors.activeBlue,)
                   ),
-                  suffixIcon: IconButton(
+                  suffixIcon: _passwordFocusNode.hasFocus ? IconButton(
                     icon: Icon(_passwordConfirm ? Icons.visibility : Icons.visibility_off, color: CupertinoColors.systemGrey, size: 20,),
-                    onPressed: () {
+                    onPressed: (){
                       setState(() {
                         _passwordConfirm = !_passwordConfirm;
                       });
                     },
-                  ),
+                  ) : null,
                 ),
                 onChanged: (val) => setState(() {
                   passwordConfirm = val;
@@ -152,23 +196,10 @@ class _SignUpState extends State<RegisterPage> {
                     borderRadius: BorderRadius.circular(35),
                   ),
                 ),
-                child: isSubmit ?
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: CircularProgressIndicator(color: CupertinoColors.white,),
-                    ),
-                    SizedBox(width: 20,),
-                    Text('Creating account...')
-                  ],
-                ) : const Text("Register", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold),),
                 onPressed: () async =>{
-                  if(email.isNotEmpty || password.isNotEmpty){
+                  if(email.isNotEmpty && password.isNotEmpty){
                     if(password == passwordConfirm){
-                      _authService.register(email, password),
+                      _authService.register( email, password),
                       setState(() => isSubmit = true),
                       Future.delayed(const Duration(seconds: 4),() => setState(() {
                         isSubmit = false;
@@ -185,6 +216,7 @@ class _SignUpState extends State<RegisterPage> {
                             color: CupertinoColors.activeBlue,
                           ),
                         ).show(context);
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Wrapper()));
                       })),
                     } else{
                       setState(() => isSubmit = true),
@@ -222,8 +254,21 @@ class _SignUpState extends State<RegisterPage> {
                         ),
                       ).show(context);
                     })),
-                  }
+                  },
                 },
+                child: isSubmit ?
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: CircularProgressIndicator(color: CupertinoColors.white,),
+                    ),
+                    SizedBox(width: 20,),
+                    Text('Creating account...')
+                  ],
+                ) : const Text("Register", style: TextStyle(color: CupertinoColors.white, fontWeight: FontWeight.bold),),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20),

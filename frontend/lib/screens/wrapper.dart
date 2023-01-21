@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tweet_feed/models/user.dart';
-import 'package:tweet_feed/screens/auth/login_page.dart';
+import 'package:tweet_feed/screens/auth/login.dart';
 import 'package:tweet_feed/screens/main/home.dart';
 import 'package:tweet_feed/screens/main/posts/add.dart';
 import 'package:tweet_feed/screens/main/profile/edit.dart';

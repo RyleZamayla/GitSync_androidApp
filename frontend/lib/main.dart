@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -27,9 +28,12 @@ class MyApp extends StatelessWidget {
                 initialData: null
               )
             ],
-            child: const MaterialApp(
+            child: MaterialApp(
               debugShowCheckedModeBanner: false,
-              home: CustomSplashScreen(),
+              theme: ThemeData(
+                disabledColor: CupertinoColors.activeBlue,
+              ),
+              home: const CustomSplashScreen(),
             )
           );
         }

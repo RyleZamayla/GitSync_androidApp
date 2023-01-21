@@ -4,12 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tweet_feed/models/user.dart';
-import 'package:tweet_feed/screens/main/home.dart';
 
 
 class Authentication {
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final googleSignIn = GoogleSignIn();
+  final GoogleSignIn googleSignIn = GoogleSignIn();
 
   UserModel? _firebaseUser(User? user) {
     return user != null ? UserModel(id: user.uid) : null;
@@ -68,8 +67,9 @@ class Authentication {
 
   Future logout() async {
     try {
-      googleSignIn.disconnect();
-      await auth.signOut();
+      await googleSignIn.disconnect().whenComplete(() async {
+        await auth.signOut();
+      });
       } catch (e) { if (kDebugMode) {
         print(e.toString());
       }
@@ -77,19 +77,19 @@ class Authentication {
     }
   }
 
-  Future<void> signInWithGoogle(context) async {
+  Future<void> signInWithGoogle() async {
     final googleAccount = await googleSignIn.signIn();
     if(googleAccount != null){
       final googleAuth = await googleAccount.authentication;
       if(googleAuth.accessToken != null && googleAuth.idToken != null){
         try{
-          await auth.signInWithCredential(
+          UserCredential googleUser = await auth.signInWithCredential(
             GoogleAuthProvider.credential(
               idToken: googleAuth.idToken,
               accessToken: googleAuth.accessToken
             )
           );
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home()));
+          _firebaseUser(googleUser.user);
         } on FirebaseAuthException catch (error){
           if (kDebugMode) {
             print(error);
