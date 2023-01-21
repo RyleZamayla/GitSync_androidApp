@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tweet_feed/models/posts.dart';
@@ -47,35 +49,46 @@ class _ProfileState extends State<Profile> {
                   pinned: true,
                   expandedHeight: 130,
                   flexibleSpace: FlexibleSpaceBar(
-                    background: Image.network(
-                        Provider.of<UserModel>(context).bannerImageUrl.toString() ?? '',
-                        fit: BoxFit.cover)
+                      background: FutureBuilder<String>(
+                          future: FirebaseStorage.instance.ref().child('usersProfiles/${uid}/banner').getDownloadURL(),
+                          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                            if(snapshot.hasData) {
+                              return Image.network(snapshot.data ?? '', fit: BoxFit.cover);
+                            } else {
+                              return CircularProgressIndicator();
+                            }
+                          }
+                      )
                   ),
                 ),
                 SliverList(delegate: SliverChildListDelegate(
-                  [
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                      child: Column(
-                        children: [
+                    [
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                        child: Column(
+                          children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Provider.of<UserModel?>(context)!.profileImageUrl != null ?
-                              CircleAvatar(
-                                radius: 40,
-                                backgroundImage: NetworkImage(
-                                    Provider.of<UserModel?>(context)!.profileImageUrl.toString() ?? ''
-                                ),
-                              ) : const Icon(Icons.person_outlined,
-                                size: 40,),
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            FutureBuilder<String>(
+                              future: FirebaseStorage.instance.ref().child('usersProfiles/${uid}/profile').getDownloadURL(),
+                              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                                if(snapshot.hasData) {
+                                  return CircleAvatar(
+                                    radius: 40,
+                                    backgroundImage: NetworkImage(snapshot.data ?? ''),
+                                  );
+                                } else {
+                                  return const Icon(Icons.person_outlined, size: 40);
+                                }
+                              },
+                            ),
+                            if(FirebaseAuth.instance.currentUser!.uid == uid)
                               ElevatedButton(
-                                onPressed: () async {
-                                Navigator.pushNamed(context, '/edit');
-
-                              }, child: const Text('Edit Profile'))
-                            ],
-                          ),
+                                  onPressed: () async {
+                                    Navigator.pushNamed(context, '/edit');
+                                  }, child: const Text('Edit Profile')
+                              ),
                           Align(
                             alignment: Alignment.centerLeft,
                               child: Container(
@@ -90,8 +103,10 @@ class _ProfileState extends State<Profile> {
                           )
                         ],
                       ),
-                    )
-                  ]
+                    ]
+                      )
+                      )
+                              ]
                 ))
               ];
             },
