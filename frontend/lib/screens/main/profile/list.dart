@@ -22,15 +22,20 @@ class _ListUsersState extends State<ListUsers> {
       itemCount: firebaseUsers.length,
       itemBuilder: (context, index) {
         final dynamic users = firebaseUsers[index];
+
+        if (firebaseUsers == null) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
         return InkWell(
           onTap: () => Navigator.pushNamed(context, '/profile', arguments: users.id),
           child: Column(
             children: [
-              Padding(padding: EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  SizedBox(width: 10),
-                  Text(users.name)
+              Padding(
+                padding: const EdgeInsets.all(10),
+                  child: Row(children: [
+                    const SizedBox(width: 10),
+                    Text(users.name)
                 ],
               ),),
               const Divider(thickness: 1)

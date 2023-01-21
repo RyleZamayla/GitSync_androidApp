@@ -14,7 +14,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   
-  UserServices _userServices = UserServices();
+  final UserServices _userServices = UserServices();
   String search = '';
   
   @override
@@ -28,14 +28,15 @@ class _SearchState extends State<Search> {
         ],
       child: Column(
         children: [
-          Padding(padding: EdgeInsets.all(10),
+          Padding(
+            padding: const EdgeInsets.all(10),
             child: TextField(
               onChanged: (text) {
                 setState(() {
                   search = text;
                 });
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   hintText: 'Search...'
               ),
             ),

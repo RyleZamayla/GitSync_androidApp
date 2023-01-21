@@ -7,20 +7,33 @@ import 'package:tweet_feed/services/user.dart';
 class ListPost extends StatefulWidget {
   const ListPost({Key? key}) : super(key: key);
 
+
   @override
   State<ListPost> createState() => _ListPostState();
 }
 
 class _ListPostState extends State<ListPost> {
+
   final UserServices _userServices = UserServices();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    final tweetedPost = Provider.of<List<PostModel>>(context) ?? [];
+    final tweetedPost = Provider.of<List<PostModel>>(context);
 
     return ListView.builder(
       itemCount: tweetedPost.length,
       itemBuilder: (BuildContext context, index) {
         final post = tweetedPost[index];
+
+        if (tweetedPost == null) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
         return StreamBuilder<UserModel?>(
             stream: _userServices.getUserInfo(post.creatorID),

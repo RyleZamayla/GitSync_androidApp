@@ -37,7 +37,10 @@ class MyApp extends StatelessWidget {
             )
           );
         }
-        return const Text("Loading");
+        return const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: Center(child: CircularProgressIndicator(),),
+        );
       }
     );
   }

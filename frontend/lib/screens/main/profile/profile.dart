@@ -17,8 +17,8 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
-  PostService _postService = PostService();
-  UserServices _userServices = UserServices();
+  final PostService _postService = PostService();
+  final UserServices _userServices = UserServices();
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class _ProfileState extends State<Profile> {
                             if(snapshot.hasData) {
                               return Image.network(snapshot.data ?? '', fit: BoxFit.cover);
                             } else {
-                              return CircularProgressIndicator();
+                              return const CircularProgressIndicator();
                             }
                           }
                       )
