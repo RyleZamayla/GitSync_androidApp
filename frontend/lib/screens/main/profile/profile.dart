@@ -34,6 +34,10 @@ class _ProfileState extends State<Profile> {
             value: _userServices.getUserInfo(uid),
             initialData: [ ],
           ),
+          StreamProvider<bool>.value(
+            value: _userServices.isFollowing(FirebaseAuth.instance.currentUser!.uid, uid),
+            initialData: false,
+          ),
         ],
 
       // Profile Tab
@@ -70,15 +74,19 @@ class _ProfileState extends State<Profile> {
                           Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            FutureBuilder<String>(
+                            FutureBuilder<String?>(
                               future: FirebaseStorage.instance.ref().child('usersProfiles/${uid}/profile').getDownloadURL(),
-                              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                              builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
                                 if(snapshot.hasData) {
                                   return CircleAvatar(
                                     radius: 40,
                                     backgroundImage: NetworkImage(snapshot.data ?? ''),
                                   );
-                                } else {
+                                }
+                                // else if(FirebaseAuth.instance.currentUser!.uid != uid && !Provider.of<bool>(context)){
+                                //
+                                // }
+                                else {
                                   return const Icon(Icons.person_outlined, size: 40);
                                 }
                               },
@@ -88,6 +96,17 @@ class _ProfileState extends State<Profile> {
                                   onPressed: () async {
                                     Navigator.pushNamed(context, '/edit');
                                   }, child: const Text('Edit Profile')
+                              )
+                            else if(FirebaseAuth.instance.currentUser!.uid != uid && !Provider.of<bool>(context))
+                              ElevatedButton(
+                                  onPressed: () async {
+                                    _userServices.followUser(uid);
+                                  }, child: const Text('Follow')
+                              )
+                            else ElevatedButton(
+                                  onPressed: () async {
+                                    _userServices.unFollowUser(uid);
+                                  }, child: const Text('UnFollow')
                               ),
                           Align(
                             alignment: Alignment.centerLeft,
@@ -97,8 +116,8 @@ class _ProfileState extends State<Profile> {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
-                                  
-                                ),),
+                                ),
+                                ),
                               ),
                           )
                         ],
@@ -112,7 +131,7 @@ class _ProfileState extends State<Profile> {
             },
             // Tweets
 
-            body: const ListPost(),
+            body: ListPost(),
           ),
         ),
       ),
