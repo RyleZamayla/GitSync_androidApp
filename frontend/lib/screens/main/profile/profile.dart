@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -23,22 +24,22 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
 
-  final String uid = ModalRoute.of(context)!.settings.arguments.toString();
+    final String uid = ModalRoute.of(context)!.settings.arguments.toString();
     return MultiProvider(
-        providers: [
-          StreamProvider<List<PostModel>>.value(
-            value: _postService.getUserPost(uid),
-            initialData: [ ],
-          ),
-          StreamProvider.value(
-            value: _userServices.getUserInfo(uid),
-            initialData: [ ],
-          ),
-          StreamProvider<bool>.value(
-            value: _userServices.isFollowing(FirebaseAuth.instance.currentUser!.uid, uid),
-            initialData: false,
-          ),
-        ],
+      providers: [
+        StreamProvider<List<PostModel>>.value(
+          value: _postService.getUserPost(uid),
+          initialData: [ ],
+        ),
+        StreamProvider.value(
+          value: _userServices.getUserInfo(uid),
+          initialData: [ ],
+        ),
+        StreamProvider<bool>.value(
+          value: _userServices.isFollowing(FirebaseAuth.instance.currentUser!.uid, uid),
+          initialData: false,
+        ),
+      ],
 
       // Profile Tab
 
@@ -53,8 +54,8 @@ class _ProfileState extends State<Profile> {
                   pinned: true,
                   expandedHeight: 130,
                   flexibleSpace: FlexibleSpaceBar(
-                      background: FutureBuilder<String>(
-                          future: FirebaseStorage.instance.ref().child('usersProfiles/${uid}/banner').getDownloadURL(),
+                      background:   StreamBuilder<String>(
+                          stream: FirebaseStorage.instance.ref().child('usersProfiles/${uid}/banner').getDownloadURL().asStream(),
                           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                             if(snapshot.hasData) {
                               return Image.network(snapshot.data ?? '', fit: BoxFit.cover);
@@ -62,70 +63,83 @@ class _ProfileState extends State<Profile> {
                               return const CircularProgressIndicator();
                             }
                           }
-                      )
+                      ),
+
                   ),
                 ),
                 SliverList(delegate: SliverChildListDelegate(
                     [
                       Container(
-                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                        child: Column(
-                          children: [
-                          Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            FutureBuilder<String?>(
-                              future: FirebaseStorage.instance.ref().child('usersProfiles/${uid}/profile').getDownloadURL(),
-                              builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
-                                if(snapshot.hasData) {
-                                  return CircleAvatar(
-                                    radius: 40,
-                                    backgroundImage: NetworkImage(snapshot.data ?? ''),
-                                  );
+                          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                          child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                  StreamBuilder<String>(
+                                  stream: FirebaseStorage.instance.ref().child('usersProfiles/${uid}/profile').getDownloadURL().asStream(),
+                                  builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                                    if(snapshot.hasData) {
+                                      return CircleAvatar(
+                                        radius: 40,
+                                        backgroundImage: NetworkImage(snapshot.data ?? ''),
+                                      );
+                                    } else {
+                                      return CircleAvatar(radius: 40 );
+                                  }
                                 }
-                                // else if(FirebaseAuth.instance.currentUser!.uid != uid && !Provider.of<bool>(context)){
-                                //
-                                // }
-                                else {
-                                  return const Icon(Icons.person_outlined, size: 40);
-                                }
-                              },
-                            ),
-                            if(FirebaseAuth.instance.currentUser!.uid == uid)
-                              ElevatedButton(
-                                  onPressed: () async {
-                                    Navigator.pushNamed(context, '/edit');
-                                  }, child: const Text('Edit Profile')
-                              )
-                            else if(FirebaseAuth.instance.currentUser!.uid != uid && !Provider.of<bool>(context))
-                              ElevatedButton(
-                                  onPressed: () async {
-                                    _userServices.followUser(uid);
-                                  }, child: const Text('Follow')
-                              )
-                            else ElevatedButton(
-                                  onPressed: () async {
-                                    _userServices.unFollowUser(uid);
-                                  }, child: const Text('UnFollow')
-                              ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                                child: Text(Provider.of<UserModel?>(context)!.name ?? '',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
                                 ),
+                                    StreamBuilder<DocumentSnapshot>(
+                                      stream: FirebaseFirestore.instance.collection('users').doc(uid).snapshots(),
+                                      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                        if (snapshot.hasData) {
+                                          return Text(snapshot.data?['name'] ?? '');
+                                        } else {
+                                          return const Text('');
+                                        }
+                                      },
+                                    ),
+
+
+
+                                    if(FirebaseAuth.instance.currentUser!.uid == uid)
+                                      ElevatedButton(
+                                        //onPressed: () {
+                                        //   FirebaseFirestore.instance.collection('users').doc(uid).update({'name': ''});
+                                        // }
+                                          onPressed: () async {
+                                            Navigator.pushNamed(context, '/edit');
+                                          }, child: const Text('Edit Profile')
+                                      )
+                                    else if(FirebaseAuth.instance.currentUser!.uid != uid && !Provider.of<bool>(context))
+                                      ElevatedButton(
+                                          onPressed: () async {
+                                            _userServices.followUser(uid);
+                                          }, child: const Text('Follow')
+                                      )
+                                    else ElevatedButton(
+                                          onPressed: () async {
+                                            _userServices.unFollowUser(uid);
+                                          }, child: const Text('UnFollow')
+                                      ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                                        child: Text(Provider.of<UserModel?>(context)!.name ?? '',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              ),
-                          )
-                        ],
-                      ),
-                    ]
-                      )
-                      )
                               ]
+                          )
+                      )
+                    ]
                 ))
               ];
             },
