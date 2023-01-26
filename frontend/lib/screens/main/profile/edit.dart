@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -16,12 +18,18 @@ class _Edit extends State<Edit> {
 
   File? _bannerImage, _profileImage;
   bool  isObscurePassword = true;
-
+  String name ='';
   final picker = ImagePicker();
   final FocusNode _focusedUsername = FocusNode();
   final TextEditingController _usernameController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+
+
 
   UserServices _userServices = UserServices();
+
+
 
   Future getImage (int type) async {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
@@ -35,14 +43,15 @@ class _Edit extends State<Edit> {
     });
   }
 
-  String name ='';
 
   @override
+
   void initState() {
     super.initState();
     _focusedUsername.addListener(_onFocusChange);
     name = _usernameController.text;
   }
+
 
   void _onFocusChange() {
     setState(() {});
@@ -50,6 +59,7 @@ class _Edit extends State<Edit> {
 
   @override
   Widget build(BuildContext context) {
+    final String? uid = _auth.currentUser?.uid;
     return Scaffold(
       backgroundColor: const Color.fromRGBO(5, 26, 47, 1.0),
       appBar: AppBar(
@@ -145,6 +155,7 @@ class _Edit extends State<Edit> {
                             _usernameController.clear();
                           });
                         },) : null,
+
                       contentPadding: const EdgeInsets.only(bottom: 5),
                       labelText: "Username",
                       labelStyle: _focusedUsername.hasFocus ? const TextStyle(
@@ -155,9 +166,12 @@ class _Edit extends State<Edit> {
                       hintStyle: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey
+                          color: Colors.white
                       )
                   ),
+                  onChanged: (value) {
+                    FirebaseFirestore.instance.collection('users').doc(uid).update({'name': value});
+                  },
                 ),
                 const SizedBox(height: 20),
                 Stack(

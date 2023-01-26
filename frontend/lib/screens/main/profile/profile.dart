@@ -9,6 +9,7 @@ import 'package:tweet_feed/screens/main/posts/list.dart';
 import 'package:tweet_feed/services/posts.dart';
 import 'package:tweet_feed/services/user.dart';
 
+
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
 
@@ -20,6 +21,8 @@ class _ProfileState extends State<Profile> {
 
   final PostService _postService = PostService();
   final UserServices _userServices = UserServices();
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,16 +57,16 @@ class _ProfileState extends State<Profile> {
                   pinned: true,
                   expandedHeight: 130,
                   flexibleSpace: FlexibleSpaceBar(
-                      background:   StreamBuilder<String>(
-                          stream: FirebaseStorage.instance.ref().child('usersProfiles/${uid}/banner').getDownloadURL().asStream(),
-                          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                            if(snapshot.hasData) {
-                              return Image.network(snapshot.data ?? '', fit: BoxFit.cover);
-                            } else {
-                              return const CircularProgressIndicator();
-                            }
+                    background:   StreamBuilder<String>(
+                        stream: FirebaseStorage.instance.ref().child('usersProfiles/${uid}/banner').getDownloadURL().asStream(),
+                        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                          if(snapshot.hasData) {
+                            return Image.network(snapshot.data ?? '', fit: BoxFit.cover);
+                          } else {
+                            return const CircularProgressIndicator();
                           }
-                      ),
+                        }
+                    ),
 
                   ),
                 ),
@@ -76,19 +79,19 @@ class _ProfileState extends State<Profile> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                  StreamBuilder<String>(
-                                  stream: FirebaseStorage.instance.ref().child('usersProfiles/${uid}/profile').getDownloadURL().asStream(),
-                                  builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                                    if(snapshot.hasData) {
-                                      return CircleAvatar(
-                                        radius: 40,
-                                        backgroundImage: NetworkImage(snapshot.data ?? ''),
-                                      );
-                                    } else {
-                                      return CircleAvatar(radius: 40 );
-                                  }
-                                }
-                                ),
+                                    StreamBuilder<String>(
+                                        stream: FirebaseStorage.instance.ref().child('usersProfiles/${uid}/profile').getDownloadURL().asStream(),
+                                        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                                          if(snapshot.hasData) {
+                                            return CircleAvatar(
+                                              radius: 40,
+                                              backgroundImage: NetworkImage(snapshot.data ?? ''),
+                                            );
+                                          } else {
+                                            return CircleAvatar(radius: 40 );
+                                          }
+                                        }
+                                    ),
                                     StreamBuilder<DocumentSnapshot>(
                                       stream: FirebaseFirestore.instance.collection('users').doc(uid).snapshots(),
                                       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -104,10 +107,8 @@ class _ProfileState extends State<Profile> {
 
                                     if(FirebaseAuth.instance.currentUser!.uid == uid)
                                       ElevatedButton(
-                                        //onPressed: () {
-                                        //   FirebaseFirestore.instance.collection('users').doc(uid).update({'name': ''});
-                                        // }
-                                          onPressed: () async {
+                                          onPressed: () {
+                                            FirebaseFirestore.instance.collection('users').doc(uid).update({'name': uid});
                                             Navigator.pushNamed(context, '/edit');
                                           }, child: const Text('Edit Profile')
                                       )
@@ -126,7 +127,7 @@ class _ProfileState extends State<Profile> {
                                       alignment: Alignment.centerLeft,
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                                        child: Text(Provider.of<UserModel?>(context)!.name ?? '',
+                                        child: Text(Provider.of<UserModel?>(context)!.name,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20,
