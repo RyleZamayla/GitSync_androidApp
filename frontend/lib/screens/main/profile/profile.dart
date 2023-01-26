@@ -88,7 +88,7 @@ class _ProfileState extends State<Profile> {
                                               backgroundImage: NetworkImage(snapshot.data ?? ''),
                                             );
                                           } else {
-                                            return CircleAvatar(radius: 40 );
+                                            return const CircleAvatar(radius: 40 );
                                           }
                                         }
                                     ),
