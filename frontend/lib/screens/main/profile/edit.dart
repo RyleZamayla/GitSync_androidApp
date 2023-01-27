@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -16,12 +19,15 @@ class _Edit extends State<Edit> {
 
   File? _bannerImage, _profileImage;
   bool  isObscurePassword = true;
-
+  String name = '', chr = '@', bio = '';
   final picker = ImagePicker();
   final FocusNode _focusedUsername = FocusNode();
   final TextEditingController _usernameController = TextEditingController();
-
-  UserServices _userServices = UserServices();
+  final FocusNode _focusedBio = FocusNode();
+  final TextEditingController _bioController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final UserServices _userServices = UserServices();
+  bool isSave = false;
 
   Future getImage (int type) async {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
@@ -35,13 +41,15 @@ class _Edit extends State<Edit> {
     });
   }
 
-  String name ='';
 
   @override
   void initState() {
     super.initState();
     _focusedUsername.addListener(_onFocusChange);
+    _focusedBio.addListener(_onFocusChange);
     name = _usernameController.text;
+    bio = _bioController.text;
+    isSave = false;
   }
 
   void _onFocusChange() {
@@ -50,183 +58,198 @@ class _Edit extends State<Edit> {
 
   @override
   Widget build(BuildContext context) {
+    final String? uid = _auth.currentUser?.uid;
     return Scaffold(
       backgroundColor: const Color.fromRGBO(5, 26, 47, 1.0),
       appBar: AppBar(
-        title: const Text('Edit your profile'),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: Row(
+          children: [
+            const Text('Edit your profile'),
+            Padding(
+              padding: const EdgeInsets.only(left: 50),
+              child: TextButton(
+                onPressed: () async{
+                  _userServices.updateProfile(_bannerImage!, _profileImage, name);
+                },
+                child: const Text('Save'),
+              ),
+            )
+          ],
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(CupertinoIcons.xmark),
           onPressed: (){
             Navigator.pop(context);
           },
         ),
-        actions: [
-          IconButton(
-              onPressed: (){
-
-              },
-              icon: const Icon(Icons.settings))
-          // IconButton(onPressed: () async{
-          //   await _userServices.updateProfile(_bannerImage!, _profileImage!, name);
-          //   Navigator.pop(context);
-          // }, icon: const Icon(Icons.save))
-        ],
       ),
       body: Container(
-        padding: const EdgeInsets.only(right:20, left: 20, top: 40),
+        padding: const EdgeInsets.only(right:10, left: 10, top: 4),
           child: GestureDetector(
             onTap: (){
               FocusScope.of(context).unfocus();
             },
             child: ListView(
               children: [
-                Center(
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: 130,
-                        height: 130,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 4,
-                            color: Colors.white
+                Stack(
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          height: 200,
+                          decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(10)
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              spreadRadius: 2,
-                              blurRadius: 10,
-                              color: Colors.black.withOpacity(0.1)
+                          child: Center(child: _bannerImage == null ? null : Image.file(_bannerImage!, fit: BoxFit.fill,)),
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color.fromRGBO(4, 65, 124, 1.0),
+                              ),
+                                onPressed: () => getImage(1),
+                                label: const Text("Edit Banner"),
+                                icon: const Icon(CupertinoIcons.photo)
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15, top: 135),
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 4,
+                                      color: const Color.fromRGBO(5, 26, 47, 1.0),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        spreadRadius: 2,
+                                        blurRadius: 10,
+                                        color: Colors.black.withOpacity(0.1)
+                                    )
+                                  ],
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                          Provider.of<UserModel?>(context)!.profileImageUrl.toString() ?? ''
+                                      )
+                                  )
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        width: 4,
+                                        color: const Color.fromRGBO(5, 26, 47, 1.0),
+                                    ),
+                                    color: Colors.blue
+                                ),
+                                child: Center(
+                                  child: IconButton(
+                                    iconSize: 15,
+                                    onPressed: () => getImage(0),
+                                    icon: const Icon(CupertinoIcons.camera,
+                                      color: Colors.white,),
+                                  ),
+                                ),
+                              ),
                             )
                           ],
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                                Provider.of<UserModel?>(context)!.profileImageUrl.toString() ?? ''
-                            )
-                          )
                         ),
                       ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              width: 4,
-                              color: Colors.white
-                            ),
-                            color: Colors.blue
-                          ),
-                          child: Center(
-                            child: IconButton(
-                              iconSize: 15,
-                              onPressed: () => getImage(0),
-                              icon: const Icon(Icons.edit,
-                                color: Colors.white,),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 40),
-                TextFormField(
-                  controller: _usernameController,
-                  focusNode: _focusedUsername,
-                  decoration: InputDecoration(
-                      suffixIcon: _focusedUsername.hasFocus ? IconButton(icon: const Icon(Icons.clear_outlined),
+                const SizedBox(height: 10),
+                Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  height: 65,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.transparent,
+                    border: Border.all(
+                      color: _focusedUsername.hasFocus? CupertinoColors.activeBlue : Colors.grey,
+                    )
+                  ),
+                  child: TextFormField(
+                    controller: _usernameController,
+                    focusNode: _focusedUsername,
+                    style: const TextStyle(color: CupertinoColors.systemGrey2),
+                    decoration: InputDecoration(
+                      prefixText: chr,
+                      prefixStyle: const TextStyle(color: CupertinoColors.systemGrey2),
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      suffixIcon: _focusedUsername.hasFocus ? IconButton(icon: const Icon(CupertinoIcons.xmark),
                         onPressed: (){
                           setState(() {
                             _usernameController.clear();
                           });
-                        },) : null,
-                      contentPadding: const EdgeInsets.only(bottom: 5),
-                      labelText: "Username",
-                      labelStyle: _focusedUsername.hasFocus ? const TextStyle(
-                          color: Colors.blue
-                      ) : const TextStyle(color: Colors.white),
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      hintText: "Sample Username",
-                      hintStyle: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey
-                      )
+                        }
+                      ) : null,
+                      labelText: 'Username',
+                      labelStyle: const TextStyle(color: CupertinoColors.systemGrey2),
+                    ),
+                    onChanged: (value) {
+                      FirebaseFirestore.instance.collection('users').doc(uid).update({'name': chr+value});
+                    },
                   ),
                 ),
-                const SizedBox(height: 20),
-                Stack(
-                  children: [
-                    Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(10)
-                      ),
-                      child: Center(child: _bannerImage == null ? null : Image.file(_bannerImage!, width: 100, height: 100,)),
-                    ),
-                    Positioned(
-                      bottom: 78,
-                      right: 65,
-                      left: 65,
-                      top: 78,
-                      child: ElevatedButton.icon(
-                        onPressed: () => getImage(1),
-                        label: const Text("Upload a Banner image"),
-                        icon: const Icon(Icons.photo)
-                      ),
-                    )
-                  ],
-
-                ),
                 const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    OutlinedButton(
-                        onPressed: (){
-                          Navigator.pop(context);
-                        },
-                        style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 50),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                        side: const BorderSide(color: Colors.white)
-                      ),
-                        child: const Text('CANCEL',
-                        style: TextStyle(
-                          fontSize: 15,
-                          letterSpacing: 2,
-                          color: Colors.white
-                          ),
-                        ),
+                Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  height: 200,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.transparent,
+                      border: Border.all(
+                        color: _focusedBio.hasFocus? CupertinoColors.activeBlue : Colors.grey,
+                      )
+                  ),
+                  child: TextFormField(
+                    focusNode: _focusedBio,
+                    maxLines: 5,
+                    minLines: 1,
+                    keyboardType: TextInputType.text,
+                    style: const TextStyle(color: CupertinoColors.systemGrey2),
+                    decoration: const InputDecoration(
+                      prefixStyle: TextStyle(color: CupertinoColors.systemGrey2),
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      labelText: 'Bio',
+                      labelStyle: TextStyle(color: CupertinoColors.systemGrey2),
+                      hintText: 'Write something about yourself',
+                      hintStyle: TextStyle(color: CupertinoColors.systemGrey2),
                     ),
-                    ElevatedButton(
-                        onPressed: () async{
-                          _userServices.updateProfile(_bannerImage!, _profileImage, name);
-                          Navigator.pop(context);
-                        },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        padding: const EdgeInsets.symmetric(horizontal: 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)
-                        )
-                      ),
-                        child: const Text('SAVE',
-                        style: TextStyle(
-                          fontSize: 15,
-                          letterSpacing: 2,
-                          color: Colors.white
-                        ),
-                      ),
-                    )
-                  ],
-                )
+                    onChanged: (value) {
+                      //FirebaseFirestore.instance.collection('users').doc(uid).update({'name': chr+value});
+                      print(value);
+                    },
+                  ),
+                ),
               ],
             ),
           ),
