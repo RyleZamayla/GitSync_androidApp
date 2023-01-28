@@ -40,7 +40,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
               controller: widget.panelController,
               color: Colors.transparent,
               body: PageView(
-                children: devInfo.map((devInfo) => Image.asset(devInfo.urlImage!, fit: BoxFit.cover)).toList(),
+                children: devInfo.map((devInfo) => Image.asset(devInfo.urlImage!, fit: BoxFit.fill)).toList(),
                 onPageChanged: (index) {
                   setState(() {
                     this.index = index;
