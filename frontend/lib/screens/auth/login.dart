@@ -57,13 +57,15 @@ class _SignInState extends State<LoginPage> {
               Lottie.asset('assets/splash/programming_comp.json',
                 width: 200, height: 200,
               ),
-              const Text('Git sync to everyone in the branch.',
-                  style: TextStyle(
-                      fontFamily: 'Ubuntu',
-                      color: CupertinoColors.systemGrey2,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold
-                  )
+              const Center(
+                child: Text('Git sync to everyone in the branch.',
+                    style: TextStyle(
+                        fontFamily: 'Ubuntu',
+                        color: CupertinoColors.systemGrey2,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold
+                    )
+                ),
               ),
               const SizedBox(height: 35,),
               TextFormField(
@@ -91,6 +93,7 @@ class _SignInState extends State<LoginPage> {
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(color: CupertinoColors.activeBlue,)
                   ),
+                  errorStyle: const TextStyle(color: CupertinoColors.activeOrange)
                 ),
                 onChanged: (val) => setState(() {
                   email = val;
@@ -162,23 +165,10 @@ class _SignInState extends State<LoginPage> {
                 ),
                 onPressed: () async => {
                   if(email.isNotEmpty && password.isNotEmpty){
+                    _authService.login(email, password),
                     setState(() => isLogIn = true),
                     Future.delayed(const Duration(seconds: 4),() => setState(() {
                       isLogIn = false;
-                      Flushbar(
-                        flushbarPosition: FlushbarPosition.TOP,
-                        title: 'Hey Developer!',
-                        message: "Welcome to synchronous branch.",
-                        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-                        duration: const Duration(seconds: 3),
-                        leftBarIndicatorColor: CupertinoColors.activeBlue,
-                        icon: const Icon(
-                          Icons.info_outline,
-                          size: 28.0,
-                          color: CupertinoColors.activeBlue,
-                        ),
-                      ).show(context);
-                      _authService.login(email, password);
                       //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Wrapper()));
                     })),
                   } else {

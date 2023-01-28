@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:tweet_feed/models/user.dart';
 import 'package:tweet_feed/services/user.dart';
 
+
 class Edit extends StatefulWidget {
   const Edit({Key? key}) : super(key: key);
 
@@ -27,7 +28,9 @@ class _Edit extends State<Edit> {
   final TextEditingController _bioController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final UserServices _userServices = UserServices();
+  UserModel user = UserModel();
   bool isSave = false;
+  final double profileImage = 130;
 
   Future getImage (int type) async {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
@@ -73,7 +76,7 @@ class _Edit extends State<Edit> {
                 onPressed: () async{
                   _userServices.updateProfile(_bannerImage!, _profileImage, name);
                 },
-                child: const Text('Save'),
+                child: const Text('Save', style: TextStyle(fontSize: 17),),
               ),
             )
           ],
@@ -103,7 +106,7 @@ class _Edit extends State<Edit> {
                               color: Colors.grey,
                               borderRadius: BorderRadius.circular(10)
                           ),
-                          child: Center(child: _bannerImage == null ? null : Image.file(_bannerImage!, fit: BoxFit.fill,)),
+                          child: _bannerImage == null ? null : Image.file(_bannerImage!, fit: BoxFit.cover,),
                         ),
                         Align(
                           alignment: Alignment.topRight,
@@ -128,9 +131,10 @@ class _Edit extends State<Edit> {
                         child: Stack(
                           children: [
                             Container(
-                              width: 100,
-                              height: 100,
+                              width: 160,
+                              height: 160,
                               decoration: BoxDecoration(
+                                color: CupertinoColors.systemGrey2,
                                   border: Border.all(
                                       width: 4,
                                       color: const Color.fromRGBO(5, 26, 47, 1.0),
@@ -146,7 +150,7 @@ class _Edit extends State<Edit> {
                                   image: DecorationImage(
                                       fit: BoxFit.cover,
                                       image: NetworkImage(
-                                          Provider.of<UserModel?>(context)!.profileImageUrl.toString() ?? ''
+                                          Provider.of<UserModel?>(context)!.profileImageUrl.toString()
                                       )
                                   )
                               ),
@@ -245,7 +249,6 @@ class _Edit extends State<Edit> {
                       hintStyle: TextStyle(color: CupertinoColors.systemGrey2),
                     ),
                     onChanged: (value) {
-                      //FirebaseFirestore.instance.collection('users').doc(uid).update({'name': chr+value});
                       print(value);
                     },
                   ),
@@ -253,27 +256,6 @@ class _Edit extends State<Edit> {
               ],
             ),
           ),
-        // child: Form(
-        //     child: Column(
-        //       children: [
-        //         ElevatedButton(
-        //             onPressed: () => getImage(0),
-        //             child: _profileImage == null ? const Icon(Icons.person) :
-        //               Image.file(_profileImage!, height: 100,)
-        //         ),
-        //         ElevatedButton(
-        //             onPressed: () => getImage(1),
-        //             child: _bannerImage == null ? const Icon(Icons.person) :
-        //             Image.file(_bannerImage!, height: 100,)
-        //         ),
-        //         TextFormField(
-        //           onChanged: (val) => setState(() {
-        //             name = val;
-        //           })
-        //         )
-        //       ],
-        //   )
-        // ),
       ),
     );
   }

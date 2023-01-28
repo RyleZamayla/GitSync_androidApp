@@ -23,9 +23,7 @@ class _ScreenState extends State<CustomSplashScreen> with TickerProviderStateMix
       if (splashController.value > 0.7) {
         splashController.stop();
         setState(() => splashLoad = true);
-        Future.delayed(const Duration(seconds: 1), () {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Wrapper()));
-        });
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Wrapper()));
       }
     });
   }
@@ -72,20 +70,6 @@ class _ScreenState extends State<CustomSplashScreen> with TickerProviderStateMix
                   )
               )
           ),
-          Center(
-            child: AnimatedOpacity(
-              opacity: showLabel? 1.0 : 0.0,
-              duration: const Duration(seconds: 1),
-              child: const Text(
-                  'Git-Sync',
-                  style: TextStyle(
-                    fontFamily: 'Ubuntu',
-                    color: CupertinoColors.activeBlue,
-                    fontSize: 20,
-                  )
-              ),
-            ),
-          )
         ],
       ),
     );

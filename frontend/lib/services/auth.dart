@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tweet_feed/models/user.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 class Authentication {
@@ -26,14 +28,8 @@ class Authentication {
       )) as User;
       _firebaseUser(userCred);
       debugPrint("Signed in as: $User ");
-    } on FirebaseAuthException catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+    } on FirebaseAuthException catch (error) {
+      Fluttertoast.showToast(msg: error.message.toString(), gravity: ToastGravity.TOP, backgroundColor: CupertinoColors.systemGrey2);
     }
   }
 
@@ -48,20 +44,8 @@ class Authentication {
           .doc(userCred.user!.uid)
           .set({'name': email, 'email': email});
       _firebaseUser(userCred.user!);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        if (kDebugMode) {
-          print('The password provided is too weak.');
-        }
-      } else if (e.code == 'email-already-in-use') {
-        if (kDebugMode) {
-          print('The account already exists for that email.');
-        }
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+    } on FirebaseAuthException catch (error) {
+      Fluttertoast.showToast(msg: error.message.toString(), gravity: ToastGravity.TOP, backgroundColor: CupertinoColors.systemGrey2);
     }
   }
 

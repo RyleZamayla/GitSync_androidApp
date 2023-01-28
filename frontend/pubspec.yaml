@@ -50,6 +50,8 @@ dependencies:
   another_flushbar: ^1.12.29
   google_sign_in: ^5.4.3
   sliding_up_panel: ^2.0.0+1
+  avatars: ^3.0.2
+  fluttertoast: ^8.1.2
 
 dev_dependencies:
   flutter_test:
@@ -65,7 +67,7 @@ dev_dependencies:
 
 flutter_native_splash:
   color: "#051A2F"
-  image: assets/images/app_logo.png
+  image: assets/images/logo.png
   android: true
   ios: true
 
