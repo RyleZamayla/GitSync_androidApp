@@ -199,23 +199,10 @@ class _SignUpState extends State<RegisterPage> {
                 onPressed: () async =>{
                   if(email.isNotEmpty && password.isNotEmpty){
                     if(password == passwordConfirm){
-                      _authService.register( email, password),
+                      _authService.register(email, password),
                       setState(() => isSubmit = true),
                       Future.delayed(const Duration(seconds: 4),() => setState(() {
                         isSubmit = false;
-                        Flushbar(
-                          flushbarPosition: FlushbarPosition.TOP,
-                          title: 'Hey Developer!',
-                          message: "Welcome to synchronous branch.",
-                          dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-                          duration: const Duration(seconds: 3),
-                          leftBarIndicatorColor: CupertinoColors.activeBlue,
-                          icon: const Icon(
-                            Icons.info_outline,
-                            size: 28.0,
-                            color: CupertinoColors.activeBlue,
-                          ),
-                        ).show(context);
                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Wrapper()));
                       })),
                     } else{

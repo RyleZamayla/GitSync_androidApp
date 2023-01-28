@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tweet_feed/models/posts.dart';
@@ -32,19 +33,17 @@ class _ProfileState extends State<Profile> {
       providers: [
         StreamProvider<List<PostModel>>.value(
           value: _postService.getUserPost(uid),
-          initialData: [ ],
+          initialData: const [],
         ),
         StreamProvider.value(
           value: _userServices.getUserInfo(uid),
-          initialData: [ ],
+          initialData: const [],
         ),
         StreamProvider<bool>.value(
           value: _userServices.isFollowing(FirebaseAuth.instance.currentUser!.uid, uid),
           initialData: false,
         ),
       ],
-
-      // Profile Tab
 
       child: Scaffold(
         body: DefaultTabController(
@@ -55,7 +54,7 @@ class _ProfileState extends State<Profile> {
                 SliverAppBar(
                   floating: false,
                   pinned: true,
-                  expandedHeight: 130,
+                  expandedHeight: 140,
                   flexibleSpace: FlexibleSpaceBar(
                     background:   StreamBuilder<String>(
                         stream: FirebaseStorage.instance.ref().child('usersProfiles/${uid}/banner').getDownloadURL().asStream(),
@@ -67,10 +66,10 @@ class _ProfileState extends State<Profile> {
                           }
                         }
                     ),
-
                   ),
                 ),
-                SliverList(delegate: SliverChildListDelegate(
+                SliverList(
+                    delegate: SliverChildListDelegate(
                     [
                       Container(
                           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
