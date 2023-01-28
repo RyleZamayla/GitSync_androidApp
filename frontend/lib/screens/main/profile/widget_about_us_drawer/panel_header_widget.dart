@@ -14,21 +14,21 @@ class PanelHeaderWidget extends StatelessWidget {
         children: [
           Text(user.name,
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               )),
-          const SizedBox(height: 10),
+          const SizedBox(height: 5),
           Text(user.bio,
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               )),
-          const SizedBox(height: 10),
+          const SizedBox(height: 5),
           Text(user.location,
               style: const TextStyle(
-                fontSize: 12,
+                fontSize: 15,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               )),
