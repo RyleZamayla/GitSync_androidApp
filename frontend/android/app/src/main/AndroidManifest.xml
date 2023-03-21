@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
    <application
-        android:label="Tweet Feed"
+        android:label="iSync"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
