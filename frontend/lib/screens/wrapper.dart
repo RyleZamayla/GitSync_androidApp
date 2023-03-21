@@ -19,7 +19,7 @@ class Wrapper extends StatelessWidget {
     }
 
     return MaterialApp( initialRoute: '/', routes: {
-        '/' : (context) => Home(),
+        '/' : (context) => const Home(),
         '/add' : (context) => const CreateTweet(),
         '/profile' : (context) => const Profile(),
         '/edit' : (context) => const Edit(),

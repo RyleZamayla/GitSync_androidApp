@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tweet_feed/models/user.dart';
@@ -35,7 +36,7 @@ class _ListUsersState extends State<ListUsers> {
                 padding: const EdgeInsets.all(10),
                   child: Row(children: [
                     const SizedBox(width: 10),
-                    Text(users.name)
+                    Text(users.name, style: const TextStyle(color: CupertinoColors.systemGrey2),)
                 ],
               ),),
               const Divider(thickness: 1)
