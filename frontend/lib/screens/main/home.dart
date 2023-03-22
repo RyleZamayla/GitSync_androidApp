@@ -31,20 +31,19 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("home"),
+        backgroundColor: const Color.fromRGBO(5, 26, 47, 1.0),
+        title: const Text("News Feed"),
       ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: (){
-            Navigator.pushNamed(context, '/add');
-          },
-          child: const Icon(Icons.add)),
       drawer: const Drawer(
-        child: DrawerPage(
-
-        ),
+        child: DrawerPage(),
       ),
       body: _children[_currentIndex],
+
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color(0xff051a2f),
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.white,
         onTap: onPressedTab,
         currentIndex: _currentIndex,
         showSelectedLabels: false,

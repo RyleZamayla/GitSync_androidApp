@@ -56,28 +56,7 @@ class _SignUpState extends State<RegisterPage> {
           padding: const EdgeInsets.all(20),
           child: ListView(
             children: [
-              ShaderMask(
-                blendMode: BlendMode.srcIn,
-                shaderCallback: (Rect bounds) => const LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment(3.7, 1),
-                  colors: <Color>[
-                    // Color(0xff1f005c),
-                    // Color(0xff5b0060),
-                    Color(0xff870160),
-                    Color(0xffac255e),
-                    // Color(0xffca485c),
-                    // Color(0xffe16b5c),
-                    // Color(0xfff39060),
-                    // Color(0xffffb56b),
-                  ],
-                  tileMode: TileMode.mirror,
-                ).createShader(bounds),
-                child: const Icon(
-                  CupertinoIcons.person_add_solid,
-                  size: 100,
-                ),
-              ),
+
               const Center(
                 child: Text('Create an account.',
                   style: TextStyle(

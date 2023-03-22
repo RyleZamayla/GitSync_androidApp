@@ -42,7 +42,7 @@ class Authentication {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userCred.user!.uid)
-          .set({'name': email, 'email': email});
+          .set({'name': 'Unknown-user', 'email': email});
       _firebaseUser(userCred.user!);
     } on FirebaseAuthException catch (error) {
       Fluttertoast.showToast(msg: error.message.toString(), gravity: ToastGravity.TOP, backgroundColor: CupertinoColors.systemGrey2);

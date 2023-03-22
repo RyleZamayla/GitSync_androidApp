@@ -17,7 +17,7 @@ class _CreateTweet extends State<CreateTweet> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tweet'),
+        backgroundColor: const Color.fromRGBO(5, 26, 47, 1.0),
         actions: <Widget>[
           MaterialButton(
               textColor: Colors.white,
@@ -25,7 +25,7 @@ class _CreateTweet extends State<CreateTweet> {
                 _postService.savePost(tweet);
                 Navigator.pop(context);
               },
-              child: const Text('Tweets')
+              child: const Text('Post')
           )
         ],
       ),

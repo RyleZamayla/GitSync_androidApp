@@ -15,7 +15,6 @@ class UserServices {
           id: doc.id,
           name: doc['name'] ?? '',
           profileImageUrl: doc['profileImageUrl'] ?? '',
-          bannerImageUrl: doc['bannerImageUrl'] ?? '',
           email: doc['email'] ?? ''
       );
     }) .toList();
@@ -27,7 +26,6 @@ class UserServices {
         id: snapshot.id,
         name: data['name'],
         profileImageUrl: data['profileImageUrl'],
-        bannerImageUrl: data['bannerImageUrl'],
         email: data['email']
     ) : null;
   }
@@ -102,13 +100,8 @@ class UserServices {
         .delete();
   }
 
-  Future <void> updateProfile(File _bannerImage, _profileImage, String name) async {
-    String? bannerImageUrl = '', profileImageUrl = '';
-    if (_bannerImage != null){
-      bannerImageUrl = await _utilityService.uploadFile(
-          _bannerImage,
-          'usersProfiles/${FirebaseAuth.instance.currentUser!.uid}/banner');
-    }
+  Future <void> updateProfile(File _profileImage, String name) async {
+    String? profileImageUrl = '';
     if (_profileImage != null){
       profileImageUrl = await _utilityService.uploadFile(
           _profileImage,
@@ -118,17 +111,6 @@ class UserServices {
     Map<String,dynamic> data = HashMap();
     if (name != '') data['name'] = name;
     if (profileImageUrl != '') data['profileImageUrl'] = profileImageUrl;
-    if (bannerImageUrl != '') data['bannerImageUrl'] = bannerImageUrl;
-
-//      UserModel data = UserModel(profileImageUrl: profileImageUrl, bannerImageUrl: bannerImageUrl, name: name);
-    // UserModel user = UserModel(
-    //     id: data['id'],
-    //     name: data['name'],
-    //     bannerImageUrl: data['bannerImageUrl'],
-    //     profileImageUrl: data['profileImageUrl'],
-    //     email: data['email']
-    // );
-
 
     await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update(data);
   }

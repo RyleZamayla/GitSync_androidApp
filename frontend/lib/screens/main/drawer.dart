@@ -27,6 +27,9 @@ class _DrawerPageState extends State<DrawerPage> {
             padding: const EdgeInsets.all(10),
             child: ListView(
               children: [
+                const SizedBox(
+                  height: 100,
+                ),
                 Lottie.asset('assets/splash/mobile_dev.json',
                     width: 200, height: 120),
                 const Text('Git-Sync',
@@ -48,6 +51,9 @@ class _DrawerPageState extends State<DrawerPage> {
                         fontWeight: FontWeight.bold
                     ),
                   ),
+                ),
+                const SizedBox(
+                  height: 50,
                 ),
                 ListTile(
                   contentPadding: const EdgeInsets.only(top: 22),

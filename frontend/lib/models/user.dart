@@ -1,10 +1,9 @@
 class UserModel {
   String? id, email;
-  String name, bannerImageUrl, profileImageUrl;
+  String name, profileImageUrl;
 
   UserModel ({
     this.id,
-    this.bannerImageUrl = '',
     this.profileImageUrl = '',
     this.name = '',
     this.email

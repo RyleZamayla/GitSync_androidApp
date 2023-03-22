@@ -25,8 +25,14 @@ class _FeedState extends State<Feed> {
             initialData: [],
     ),
     ],
-      child: const Scaffold(
-          body: ListPost()
+      child: Scaffold(
+        backgroundColor: const Color(0xff051a2e),
+          body: const ListPost(),
+          floatingActionButton: FloatingActionButton(
+              onPressed: (){
+                Navigator.pushNamed(context, '/add');
+              },
+              child: const Icon(Icons.add)),
       ),
     );
   }

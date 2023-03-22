@@ -41,7 +41,7 @@ class _SearchState extends State<Search> {
               ),
             ),
           ),
-          ListUsers()
+          const ListUsers()
         ],
       ),
 

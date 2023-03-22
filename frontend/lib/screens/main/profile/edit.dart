@@ -18,14 +18,12 @@ class Edit extends StatefulWidget {
 
 class _Edit extends State<Edit> {
 
-  File? _bannerImage, _profileImage;
+  File? _profileImage;
   bool  isObscurePassword = true;
-  String name = '', chr = '@', bio = '';
+  String name = '';
   final picker = ImagePicker();
   final FocusNode _focusedUsername = FocusNode();
   final TextEditingController _usernameController = TextEditingController();
-  final FocusNode _focusedBio = FocusNode();
-  final TextEditingController _bioController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final UserServices _userServices = UserServices();
   UserModel user = UserModel();
@@ -38,9 +36,6 @@ class _Edit extends State<Edit> {
       if(pickedFile != null && type == 0){
         _profileImage = File(pickedFile.path);
       }
-      if(pickedFile != null && type == 1){
-        _bannerImage = File(pickedFile.path);
-      }
     });
   }
 
@@ -49,9 +44,7 @@ class _Edit extends State<Edit> {
   void initState() {
     super.initState();
     _focusedUsername.addListener(_onFocusChange);
-    _focusedBio.addListener(_onFocusChange);
     name = _usernameController.text;
-    bio = _bioController.text;
     isSave = false;
   }
 
@@ -67,20 +60,6 @@ class _Edit extends State<Edit> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Row(
-          children: [
-            const Text('Edit your profile'),
-            Padding(
-              padding: const EdgeInsets.only(left: 50),
-              child: TextButton(
-                onPressed: () async{
-                  _userServices.updateProfile(_bannerImage!, _profileImage, name);
-                },
-                child: const Text('Save', style: TextStyle(fontSize: 17),),
-              ),
-            )
-          ],
-        ),
         leading: IconButton(
           icon: const Icon(CupertinoIcons.xmark),
           onPressed: (){
@@ -89,7 +68,8 @@ class _Edit extends State<Edit> {
         ),
       ),
       body: Container(
-        padding: const EdgeInsets.only(right:10, left: 10, top: 4),
+        padding: const EdgeInsets.only(right:25, left: 25, top: 80),
+          alignment: Alignment.center,
           child: GestureDetector(
             onTap: (){
               FocusScope.of(context).unfocus();
@@ -98,94 +78,65 @@ class _Edit extends State<Edit> {
               children: [
                 Stack(
                   children: [
-                    Stack(
-                      children: [
-                        Container(
-                          height: 200,
-                          decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(10)
-                          ),
-                          child: _bannerImage == null ? null : Image.file(_bannerImage!, fit: BoxFit.cover,),
-                        ),
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color.fromRGBO(4, 65, 124, 1.0),
-                              ),
-                                onPressed: () => getImage(1),
-                                label: const Text("Edit Banner"),
-                                icon: const Icon(CupertinoIcons.photo)
+                    Align(
+                      alignment: Alignment.center,
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: 160,
+                            height: 160,
+                            decoration: BoxDecoration(
+                              color: CupertinoColors.systemGrey2,
+                                border: Border.all(
+                                    width: 4,
+                                    color: const Color.fromRGBO(5, 26, 47, 1.0),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                      spreadRadius: 2,
+                                      blurRadius: 10,
+                                      color: Colors.black.withOpacity(0.1)
+                                  )
+                                ],
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                        Provider.of<UserModel?>(context)!.profileImageUrl.toString()
+                                    )
+                                )
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15, top: 135),
-                        child: Stack(
-                          children: [
-                            Container(
-                              width: 160,
-                              height: 160,
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              height: 40,
+                              width: 40,
                               decoration: BoxDecoration(
-                                color: CupertinoColors.systemGrey2,
+                                  shape: BoxShape.circle,
                                   border: Border.all(
                                       width: 4,
                                       color: const Color.fromRGBO(5, 26, 47, 1.0),
                                   ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        spreadRadius: 2,
-                                        blurRadius: 10,
-                                        color: Colors.black.withOpacity(0.1)
-                                    )
-                                  ],
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(
-                                          Provider.of<UserModel?>(context)!.profileImageUrl.toString()
-                                      )
-                                  )
+                                  color: Colors.blue
+                              ),
+                              child: Center(
+                                child: IconButton(
+                                  iconSize: 15,
+                                  onPressed: () => getImage(0),
+                                  icon: const Icon(CupertinoIcons.camera,
+                                    color: Colors.white,),
+                                ),
                               ),
                             ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        width: 4,
-                                        color: const Color.fromRGBO(5, 26, 47, 1.0),
-                                    ),
-                                    color: Colors.blue
-                                ),
-                                child: Center(
-                                  child: IconButton(
-                                    iconSize: 15,
-                                    onPressed: () => getImage(0),
-                                    icon: const Icon(CupertinoIcons.camera,
-                                      color: Colors.white,),
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                          )
+                        ],
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 25),
                 Container(
                   padding: const EdgeInsets.only(left: 10),
                   height: 65,
@@ -202,7 +153,6 @@ class _Edit extends State<Edit> {
                     focusNode: _focusedUsername,
                     style: const TextStyle(color: CupertinoColors.systemGrey2),
                     decoration: InputDecoration(
-                      prefixText: chr,
                       prefixStyle: const TextStyle(color: CupertinoColors.systemGrey2),
                       border: InputBorder.none,
                       focusedBorder: InputBorder.none,
@@ -217,42 +167,30 @@ class _Edit extends State<Edit> {
                       labelStyle: const TextStyle(color: CupertinoColors.systemGrey2),
                     ),
                     onChanged: (value) {
-                      FirebaseFirestore.instance.collection('users').doc(uid).update({'name': chr+value});
+                      FirebaseFirestore.instance.collection('users').doc(uid).update({'name': value});
                     },
                   ),
                 ),
                 const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.only(left: 10),
-                  height: 200,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.transparent,
-                      border: Border.all(
-                        color: _focusedBio.hasFocus? CupertinoColors.activeBlue : Colors.grey,
+                ElevatedButton(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50)
                       )
-                  ),
-                  child: TextFormField(
-                    focusNode: _focusedBio,
-                    maxLines: 5,
-                    minLines: 1,
-                    keyboardType: TextInputType.text,
-                    style: const TextStyle(color: CupertinoColors.systemGrey2),
-                    decoration: const InputDecoration(
-                      prefixStyle: TextStyle(color: CupertinoColors.systemGrey2),
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      labelText: 'Bio',
-                      labelStyle: TextStyle(color: CupertinoColors.systemGrey2),
-                      hintText: 'Write something about yourself',
-                      hintStyle: TextStyle(color: CupertinoColors.systemGrey2),
                     ),
-                    onChanged: (value) {
-                      print(value);
-                    },
                   ),
-                ),
+                    onPressed: () async {
+                      _userServices.updateProfile(_profileImage!, name);
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Save',
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.white
+                      ),
+                    )
+                )
               ],
             ),
           ),
