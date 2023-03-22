@@ -16,7 +16,7 @@ class _ListUsersState extends State<ListUsers> {
 
   Widget build(BuildContext context) {
 
-    final firebaseUsers = Provider.of<List<UserModel?>>(context) ?? [];
+    final firebaseUsers = Provider.of<List<UserModel?>>(context);
 
     return ListView.builder(
       shrinkWrap: true,

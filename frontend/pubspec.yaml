@@ -52,10 +52,16 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   avatars: ^3.0.2
   fluttertoast: ^8.1.2
+  flutter_launcher_icons: ^0.12.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.12.0"
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/main.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -89,6 +95,7 @@ flutter:
     - assets/profile_pic/
     - assets/images/unknown-user.jpg
     - assets/splash/register-user.json
+    - assets/images/main.png
   fonts:
     - family: Ubuntu
       fonts:
