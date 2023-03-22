@@ -1,6 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tweet_feed/screens/wrapper.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
@@ -56,6 +57,10 @@ class _SignUpState extends State<RegisterPage> {
           padding: const EdgeInsets.all(20),
           child: ListView(
             children: [
+
+              Lottie.asset('assets/splash/register-user.json',
+                width: 200, height: 200,
+              ),
 
               const Center(
                 child: Text('Create an account.',
